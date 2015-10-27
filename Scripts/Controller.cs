@@ -51,7 +51,7 @@ public class Controller : MonoBehaviour {
 		}
 
 		if ((Input.touchCount>0)||(Input.GetMouseButton(0))||(Input.GetMouseButtonUp(0))) {
-			if (UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject ()) {
+			if (UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject () || myGlobal.UIClick) {
 				return;
 			}
 	    	if (Input.touchCount==1){ //одно нажатие - двигаем точку или управляем параметрами

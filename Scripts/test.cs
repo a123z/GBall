@@ -58,8 +58,9 @@ public class test : MonoBehaviour {
 	}*/
 
 	public void beginDrag(BaseEventData bde){
-		rrr = GameObject.Instantiate(point2DPrefab, Input.mousePosition, Quaternion.identity) as GameObject;
+		rrr = GameObject.Instantiate(gameObject, Input.mousePosition, Quaternion.identity) as GameObject;
 		rrr.transform.SetParent(GameObject.Find("pfCanvas").transform);
+		myGlobal.UIClick = true;
 	}
 
 	public void doingDrag(BaseEventData bde){
@@ -71,9 +72,11 @@ public class test : MonoBehaviour {
 	public void endDrag(BaseEventData bde){
 		Vector3 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 		pos.z = 0;
-		//Debug.Log(string.Format("pos {0}  {1}",pos,Input.mousePosition));
+		//gameObject.
+		//Debug.Log(string.Format("pos {0}  {1}",gameObject.name,gameObject.transform.position));
 		GameObject.Instantiate(point3DPrefab,pos,Quaternion.identity);
 		Destroy(rrr);
+	myGlobal.UIClick = false;
 		//rrr = null;
 	}
 

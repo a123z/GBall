@@ -4,6 +4,6 @@ public static class myGlobal{
   public static int score;
   public static int GPower;
   public static bool soundOn;
-	public static bool UIClick;
+  public static bool UIClick;
 
 }

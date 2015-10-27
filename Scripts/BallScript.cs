@@ -56,7 +56,7 @@ public class BallScript : MonoBehaviour {
 					PortalPrefub.GetComponent<scrPortal1>().RunTeleport();
 				}
 			}else WaitPass-=Time.fixedDeltaTime;
-			Debug.Log(string.Format("pass={0}",BasketPass));
+			//Debug.Log(string.Format("pass={0}",BasketPass));
 		} else if (BasketPass>0)BasketPass=0;
 
 	}
