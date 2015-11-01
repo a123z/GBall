@@ -5,8 +5,8 @@ public class BallScript : MonoBehaviour {
 	public GameObject PortalPrefub;
 
 	const float G=6.67545E-11f;
-	const float m1=2f;
-	int i=0;
+	const float m1=20f;
+	//int i=0;
 	GameObject basket;
 	Vector3 tV3;
 	bool teleportRun=false;
@@ -36,11 +36,11 @@ public class BallScript : MonoBehaviour {
 			}
 		}
 		//Debug.Log(string.Format("deltatime={0} grav={1}",Time.fixedDeltaTime, Grav.magnitude));
-		i++;
+		//i++;
 		gameObject.GetComponent<ConstantForce>().force = Grav;
 		if ((gameObject.transform.position.y<-30)&&!teleportRun){
-			Debug.Log(string.Format("calc count={0}, y={1}",i,gameObject.transform.position.y));
-			i=0;
+			//Debug.Log(string.Format("calc count={0}, y={1}",i,gameObject.transform.position.y));
+			//i=0;
 			teleportRun = true;
 			//GameObject.Find("pfPortal1").GetComponent<scrPortal1>().RunTeleport();
 			PortalPrefub.GetComponent<scrPortal1>().RunTeleport();

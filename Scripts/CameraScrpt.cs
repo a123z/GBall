@@ -14,8 +14,8 @@ public class CameraScrpt : MonoBehaviour {
 	int oper_id=0; //0-no operation, 1-move point 2-change power ?3-on|off point 4-add point 5-del point
 	Vector3 ray_cast;
 	Vector3 mouse_pos;
-	int levelsCount = 4;
-	SaveLoad.level[] levels;
+	//int levelsCount = 4;
+	//SaveLoad.Level[] levels;
 	float tf=10f;
 	float maxSlVal;
 	float minSlVal;
@@ -26,26 +26,21 @@ public class CameraScrpt : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		levels = new SaveLoad.level[levelsCount];
-		levels[0] = new SaveLoad.level();
+		//levels = new SaveLoad.Level[levelsCount];
+		//levels[0] = new SaveLoad.Level();
 
 		tmp_plane = new Plane(Vector3.forward,0);
 		mode = 0;
 		//return;
-		BinaryFormatter formatter = new BinaryFormatter();
-		FileStream fs = new FileStream("points.dat", FileMode.OpenOrCreate);
-		levels = (SaveLoad.level[])formatter.Deserialize(fs);
+
 		//levels[0].points.GetLength
-		for (int i_=0; i_<levels[0].points.GetLength(0); i_++){
-			GameObject g = Instantiate(PointPrefab,levels[0].points[i_].getPos(),Quaternion.identity) as GameObject;
-			g.GetComponent<pointScript>().gravity = levels[0].points[i_].GraviMass; 
-		}
-		fs.Close();
+
+
 		Input.simulateMouseWithTouches = true;
 	}
 
 	void Update () {
-		if (!GUI.changed && Input.GetMouseButtonDown(0) && mode==0&&1==0) {
+		/*if (!GUI.changed && Input.GetMouseButtonDown(0) && mode==0&&1==0) {
 			//btnPressed = true;
 			Debug.Log(string.Format("upd gui_chg={0}",GUI.changed ));
 			ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -94,13 +89,7 @@ public class CameraScrpt : MonoBehaviour {
 						break;
 					}
 				} else if (point_first_click)point_first_click=false;
-				  /*else { //после нажатия сместили
-					if (selected_point.GetComponent<pointScript>().GetSelectState()==1){
-						//(Input.mousePosition.y-mouse_pos.y)
-					} else if (selected_point.GetComponent<pointScript>().GetSelectState()==2){
-
-					}
-				}*/
+				  
 			}
 		}
 		if (btnPressOnPoint && mode==0 && Input.GetMouseButton(0)){ //кнопка нажата - отслеживаем движение
@@ -115,7 +104,7 @@ public class CameraScrpt : MonoBehaviour {
 				selected_point.GetComponent<pointScript>().SetGravity(tg+(ray.GetPoint(rayDistance)-selected_point.transform.position).y*tg*0.01f);
 			}
 
-		}
+		}*/
 	}
 
 	// Update is called once per frame
@@ -179,24 +168,7 @@ public class CameraScrpt : MonoBehaviour {
 
 
 
-	void OnApplicationQuit() {
-		BinaryFormatter formatter = new BinaryFormatter();
-		FileStream fs = new FileStream("points.dat", FileMode.OpenOrCreate);
-		
-		GameObject[] ggg = GameObject.FindGameObjectsWithTag("points");
-		//Debug.Log(string.Format("asds {0}",ggg.GetLength(0)));
-		//Debug.Log(string.Format("asds {0}",levels.GetLength(0)));
-		levels[0].points = new SaveLoad.point[ggg.GetLength(0)];
-		int i_=0;
-		foreach (GameObject g in ggg){
-			levels[0].points[i_] = new SaveLoad.point(g.transform.position,g.GetComponent<pointScript>().gravity);
-			i_++;
-		}
-		
-		formatter.Serialize(fs, levels);
-		fs.Close();
-		Debug.Log("Serialization finished");
-	}
+
 
 	/*void OnGUI(){
 		//Debug.Log(string.Format("gui gui_chg={0}",GUI.changed ));

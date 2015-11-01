@@ -98,7 +98,7 @@ public class Controller : MonoBehaviour {
 
 					ray = Camera.main.ScreenPointToRay(Input.GetTouch(0).position);
 					RaycastF = Physics.Raycast(ray, out hit, 100f);
-					if (RaycastF) Debug.Log("raycast touch"+hit.collider.name);
+					//if (RaycastF) Debug.Log("raycast touch"+hit.collider.name);
 					if (RaycastF&&(hit.collider.tag == "point")){ //проверяем что попали в гравиточку    если никуда не попали и долго держим - создать новую
 						point = hit.collider.gameObject;
 						pointStartPos = point.transform.position;
@@ -179,7 +179,7 @@ public class Controller : MonoBehaviour {
 				break;
 			case 3: //нажали в точку и двигали
 				tempV3 = TouchPos1 - BeginTouch1;
-				if (tempV3.sqrMagnitude > 0.1) {
+				if (tempV3.sqrMagnitude > 0.03f) {
 					//Camera.main.ScreenToViewportPoint();
 					point.transform.position = point.transform.position + tempV3;
 					BeginTouch1 = TouchPos1;
