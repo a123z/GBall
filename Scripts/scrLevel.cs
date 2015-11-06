@@ -29,9 +29,11 @@ public class scrLevel : MonoBehaviour {
 
 	public void saveLevelData(){
 		GameObject[] ggg = GameObject.FindGameObjectsWithTag("points");
-		//Debug.Log(string.Format("asds {0}",ggg.GetLength(0)));
-		//Debug.Log(string.Format("asds {0}",levels.GetLength(0)));
-		myGlobal.levels[levelNum].points = new Point[ggg.GetLength(0)];
+		Debug.Log(string.Format("asds {0} lvl len ={1}   {2}",ggg.GetLength(0),myGlobal.levels.GetLength(0),levelNum));
+		//Debug.Log(string.Format("asds {0}",);
+		//if (myGlobal.levels[levelNum] != null) 
+			myGlobal.levels[levelNum].points = new Point[ggg.GetLength(0)];
+		  //else Debug.Log("levels is null!!!!!!!!");
 		int i_=0;
 		foreach (GameObject g in ggg){
 			myGlobal.levels[levelNum].points[i_] = new Point(g.transform.position,g.GetComponent<pointScript>().gravity);
@@ -40,9 +42,11 @@ public class scrLevel : MonoBehaviour {
 	}
 
 	void loadLevelData(){
-		for (int i_=0; i_<myGlobal.levels[levelNum].points.GetLength(0); i_++){
-			GameObject g = Instantiate(PointPrefab,myGlobal.levels[levelNum].points[i_].getPos(),Quaternion.identity) as GameObject;
-			g.GetComponent<pointScript>().gravity = myGlobal.levels[levelNum].points[i_].GraviMass; 
+		if (myGlobal.levels[levelNum] != null) {
+			for (int i_=0; i_<myGlobal.levels[levelNum].points.GetLength(0); i_++){
+				GameObject g = Instantiate(PointPrefab,myGlobal.levels[levelNum].points[i_].getPos(),Quaternion.identity) as GameObject;
+				g.GetComponent<pointScript>().gravity = myGlobal.levels[levelNum].points[i_].GraviMass; 
+			}
 		}
 	}
 

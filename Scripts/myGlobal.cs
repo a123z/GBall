@@ -20,7 +20,9 @@ public static class myGlobal{
 
 	public static void Init(){
 		levels = new scrLevel.Level[myGlobal.levelsCount];
-		myGlobal.levels[0] = new scrLevel.Level();
+		for (int i=0;i<levelsCount;i++){
+			myGlobal.levels[i] = new scrLevel.Level();
+		}
 	}
 
 	public static void musicOn(bool On){
