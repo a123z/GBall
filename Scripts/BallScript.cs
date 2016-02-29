@@ -47,6 +47,7 @@ public class BallScript : MonoBehaviour {
 			//GameObject.Find("pfPortal1").GetComponent<scrPortal1>().RunTeleport();
 			teleportRun = portal.GetComponent<scrPortal1>().RunTeleport(gameObject);
 			//GoToStart();
+
 		}
 		if (basket!=null &&(basket.transform.position-gameObject.transform.position).sqrMagnitude<0.5f){
 			if (WaitPass<=0){
@@ -55,7 +56,9 @@ public class BallScript : MonoBehaviour {
 				if (BasketPass>=3){
 					BasketPass = 0;
 					//GameObject.Find("pfPortal1").GetComponent<scrPortal1>().RunTeleport();
-					teleportRun = portal.GetComponent<scrPortal1>().RunTeleport(gameObject);
+					//teleportRun = portal.GetComponent<scrPortal1>().RunTeleport(gameObject);
+					GameObject.Find("pfResultCanvas").GetComponent<scrResult>().ShowResult();
+
 				}
 			}else WaitPass-=Time.fixedDeltaTime;
 			//Debug.Log(string.Format("pass={0}",BasketPass));

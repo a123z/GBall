@@ -9,6 +9,10 @@ public static class myGlobal{
 	public static bool UIClick;
 	public static scrLevel.Level[] levels;
 	public static string saveFileName="points.dat";
+	public static int Gr; 
+	public static int deltaGr=1;
+	const int GrDefault=100; //кол-во гравитонов по умолчанию
+
 
 	static bool _musicOn;
 
@@ -20,9 +24,10 @@ public static class myGlobal{
 
 	public static void Init(){
 		levels = new scrLevel.Level[myGlobal.levelsCount];
-		for (int i=0;i<levelsCount;i++){
-			myGlobal.levels[i] = new scrLevel.Level();
-		}
+		Gr = 20;
+		//for (int i=0;i<levelsCount;i++){
+		//	myGlobal.levels[i] = new scrLevel.Level();
+		//}
 	}
 
 	public static void musicOn(bool On){
@@ -33,5 +38,19 @@ public static class myGlobal{
 				}
 			} //components
 		} //objects*/
+	}
+
+	public static void SetGr(int value=GrDefault){
+		Gr = value;
+	}
+	
+	public static void ClearGameProgress(int levelNum=0){
+		if (levelNum==0){
+			levels = null;
+		} else {
+			levels[levelNum] = null;
+		}
+		SetGr();
+		
 	}
 }

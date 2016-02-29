@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 public class scrMainCamera : MonoBehaviour {
 
@@ -14,7 +15,8 @@ public class scrMainCamera : MonoBehaviour {
 	}
 
 	public void LoadNextScene(){
-		Application.LoadLevel(1);
-	}
+		//Application.LoadLevel(1);
+        SceneManager.LoadScene(1);
+    }
 
 }

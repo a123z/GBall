@@ -4,12 +4,14 @@ using System.Collections;
 public class scrPointControl : MonoBehaviour {
 	GameObject point;
 	GameObject powerTxtObj;
+	GameObject grCount;
 	// Use this for initialization
 	void Start () {
-
+		grCount = GameObject.Find("txtGr");
 		powerTxtObj = GameObject.Find("txtPower");
 		powerTxtObj.GetComponent<UnityEngine.UI.Text>().text = "0";
-		Debug.Log(string.Format("asdas{0}",powerTxtObj.GetComponentInParent<RectTransform>().anchoredPosition));
+		//Debug.Log(string.Format("asdas{0}",powerTxtObj.GetComponentInParent<RectTransform>().anchoredPosition));
+		if (grCount==null) Debug.Log("Поле для отображения кол-ва гравитонов не найдено.");
 	}
 	
 	// Update is called once per frame
@@ -34,17 +36,24 @@ public class scrPointControl : MonoBehaviour {
 	}
 
 	public void gravityPlus(){
-		point.GetComponent<pointScript>().SetGravity(point.GetComponent<pointScript>().GetGravity()+1);
-		updatePowerText();
+		if ((myGlobal.Gr-myGlobal.deltaGr)>=0){
+			myGlobal.Gr += -myGlobal.deltaGr;
+			point.GetComponent<pointScript>().SetGravity(point.GetComponent<pointScript>().GetGravity()+myGlobal.deltaGr);
+			updatePowerText();
+		};
 	}
 
 	public void gravityMinus(){
-		point.GetComponent<pointScript>().SetGravity(point.GetComponent<pointScript>().GetGravity()-1);
-		updatePowerText();
+		if (point.GetComponent<pointScript>().GetGravity()-myGlobal.deltaGr>=0){
+			myGlobal.Gr += myGlobal.deltaGr;
+			point.GetComponent<pointScript>().SetGravity(point.GetComponent<pointScript>().GetGravity()-myGlobal.deltaGr);
+			updatePowerText();
+		}
 	}
 
 	void updatePowerText(){
-		powerTxtObj.GetComponent<UnityEngine.UI.Text>().text = point.GetComponent<pointScript>().GetGravity().ToString();
+        if (powerTxtObj != null && point != null)powerTxtObj.GetComponent<UnityEngine.UI.Text>().text = point.GetComponent<pointScript>().GetGravity().ToString();
+		grCount.GetComponent<UnityEngine.UI.Text>().text = myGlobal.Gr.ToString();
 	}
 
 	public void delPoint(){

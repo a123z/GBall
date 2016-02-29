@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
+using UnityEngine.SceneManagement;
 
 public class scrLevel : MonoBehaviour {
 	public int levelNum=0; //номер уровня 0-стартовый экран
@@ -12,9 +13,12 @@ public class scrLevel : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		Debug.Log("scrLevel start");
-		myGlobal.Init();
-		LoadLevelsFromFile(myGlobal.saveFileName);
+		if ((levelNum==0)||myGlobal.levels==null){
+			myGlobal.Init();
+			LoadLevelsFromFile(myGlobal.saveFileName);
+		}
 		loadLevelData();
+        myGlobal.UIClick = false;
 	}
 	
 	// Update is called once per frame
@@ -24,16 +28,21 @@ public class scrLevel : MonoBehaviour {
 
 	public void loadNextLevel(){
 		saveLevelData();
-		Application.LoadLevel(levelNum+1);
-	}
+        //Application.LoadLevel(levelNum + 1);
+        SceneManager.LoadScene(levelNum + 1);
+    }
 
 	public void saveLevelData(){
 		GameObject[] ggg = GameObject.FindGameObjectsWithTag("points");
-		Debug.Log(string.Format("asds {0} lvl len ={1}   {2}",ggg.GetLength(0),myGlobal.levels.GetLength(0),levelNum));
+		//Debug.Log(string.Format("asds {0} lvl len ={1}   {2}  {3}",ggg.GetLength(0),myGlobal.levels.GetLength(0),levelNum, myGlobal.levels[levelNum]==null ));
 		//Debug.Log(string.Format("asds {0}",);
-		//if (myGlobal.levels[levelNum] != null) 
-			myGlobal.levels[levelNum].points = new Point[ggg.GetLength(0)];
-		  //else Debug.Log("levels is null!!!!!!!!");
+		if (myGlobal.levels[levelNum] == null) {
+			myGlobal.levels[levelNum] = new Level();
+		}
+		myGlobal.levels[levelNum].graviMinus = 0;
+		myGlobal.levels[levelNum].graviPlus = 0;
+		myGlobal.levels[levelNum].passed = false;
+		myGlobal.levels[levelNum].points = new Point[ggg.GetLength(0)];
 		int i_=0;
 		foreach (GameObject g in ggg){
 			myGlobal.levels[levelNum].points[i_] = new Point(g.transform.position,g.GetComponent<pointScript>().gravity);
@@ -80,7 +89,7 @@ public class scrLevel : MonoBehaviour {
 		}
 		
 		public Vector3 getPos(){
-			return (new Vector3(_x, _y, _z));
+			return (new Vector3(_x, _y, _z)); 
 		}
 	}
 	
@@ -93,9 +102,18 @@ public class scrLevel : MonoBehaviour {
 		public int graviPlus;
 		public int graviMinus;
 	}
+
+	[System.Serializable]
+	public class GameData
+	{
+		public int score;
+		public int lastLevel;
+		public int gr;
+		public Level[] levels;
+	}
 	
 	void OnApplicationQuit() {
-		GameObject.Find("goLevel").GetComponent<scrLevel>().saveLevelData();
+		saveLevelData();
 		SaveLevelsToFile(myGlobal.saveFileName);
 	}
 	
@@ -118,5 +136,8 @@ public class scrLevel : MonoBehaviour {
 		Debug.Log("Serialization finished");
 	}
 
+	public void GameExit(){
+		Application.Quit();
+	}
 
 }
