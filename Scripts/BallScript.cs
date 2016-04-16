@@ -13,16 +13,21 @@ public class BallScript : MonoBehaviour {
 	Vector3 tV3;
 	int BasketPass=0;
 	float WaitPass=0;
+	float maxSpeed=0;
+	float maxHeight=0;
+	float tmpFloat;
+	float startFlightTime=0;
 
 	// Use this for initialization
 	void Start () {
 		basket = GameObject.FindGameObjectWithTag("basket");
 		portal = GameObject.FindGameObjectWithTag("portal");
+
 	}
 	
 	// Update is called once per frame
 	void Update () {
-
+		
 
 	}
 
@@ -57,6 +62,8 @@ public class BallScript : MonoBehaviour {
 					BasketPass = 0;
 					//GameObject.Find("pfPortal1").GetComponent<scrPortal1>().RunTeleport();
 					//teleportRun = portal.GetComponent<scrPortal1>().RunTeleport(gameObject);
+					Debug.Log("show result");
+					basket = null;
 					GameObject.Find("pfResultCanvas").GetComponent<scrResult>().ShowResult();
 
 				}
@@ -64,12 +71,36 @@ public class BallScript : MonoBehaviour {
 			//Debug.Log(string.Format("pass={0}",BasketPass));
 		} else if (BasketPass>0)BasketPass=0;
 
+		tmpFloat = gameObject.GetComponent<Rigidbody>().velocity.sqrMagnitude;
+		if (tmpFloat>maxSpeed) maxSpeed = tmpFloat;
+
+		if (maxHeight<gameObject.transform.position.y) maxHeight = gameObject.transform.position.y;
 	}
 
 	Vector3 GetGravity(Vector3 dest, float gravity){
 		//float res = G*m1*gravity/dest.sqrMagnitude;
 		//Mathf.Floor
 		return(dest.normalized*m1*gravity/dest.sqrMagnitude);
+	}
+
+
+	public float GetMaxSpeed(){
+		return Mathf.Sqrt(maxSpeed);
+	}
+
+	public float GetMaxHeight(){
+		return maxHeight;
+	}
+
+	public void ResetAfterTeleport(){
+		startFlightTime = Time.realtimeSinceStartup; 
+		maxSpeed = 0;
+		maxHeight = 0;
+	}
+
+	public float GetFlightTime(){
+		if (startFlightTime==0) return 0;
+		return Time.realtimeSinceStartup-startFlightTime;
 	}
 
 	/*public void GoToStart(Vector3 newPos){

@@ -29,7 +29,7 @@ public class scrPortal1 : MonoBehaviour {
 				_rotateTime = -1f;
 				GoToStart(gameObject.transform.position-_deltaPoint);
 				gameObject.GetComponent<ParticleSystem>().Play();
-				
+				if (ball!=null) ball.GetComponent<BallScript>().ResetAfterTeleport(); //сбросили таймер полёта
 			}
 		}
 	}

@@ -12,4 +12,8 @@ public class scrSettings : MonoBehaviour {
 	void Update () {
 	
 	}
+
+	public void GameExit(){
+		Application.Quit();
+	}
 }

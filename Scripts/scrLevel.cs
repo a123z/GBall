@@ -8,19 +8,32 @@ public class scrLevel : MonoBehaviour {
 	public int levelNum=0; //номер уровня 0-стартовый экран
 	public int graviPlus;  //сколько начислено бонусных гравитонов
 	public int graviMinus; //сколько истрачено гравитонов за уровень
+	public float HighSpeed = 5f;	//скорость выше которой насчитываются бонусы
+	public float LargeHeight = 40f;  //высота выше которой насчитываются бонусы
 	public GameObject PointPrefab;
+
 
 	// Use this for initialization
 	void Start () {
 		Debug.Log("scrLevel start");
-		if ((levelNum==0)||myGlobal.levels==null){
+		if ((levelNum==0)||myGlobal.gameData==null){
 			myGlobal.Init();
 			LoadLevelsFromFile(myGlobal.saveFileName);
+			if (myGlobal.gameData.levels.Length<myGlobal.levelsCount){
+					myGlobal.gameData.levels = new scrLevel.Level[myGlobal.levelsCount];
+			}
 		}
 		loadLevelData();
         myGlobal.UIClick = false;
+		print(Application.persistentDataPath.ToString());
+		myGlobal.StartLevelTime = Time.realtimeSinceStartup;
+		Debug.Log("start time "+myGlobal.StartLevelTime.ToString());
 	}
-	
+
+	/*void OnGUI(){
+		GUI.Label(new Rect(40,60,400,80),Application.persistentDataPath.ToString());
+	}*/
+
 	// Update is called once per frame
 	void Update () {
 	
@@ -36,25 +49,25 @@ public class scrLevel : MonoBehaviour {
 		GameObject[] ggg = GameObject.FindGameObjectsWithTag("points");
 		//Debug.Log(string.Format("asds {0} lvl len ={1}   {2}  {3}",ggg.GetLength(0),myGlobal.levels.GetLength(0),levelNum, myGlobal.levels[levelNum]==null ));
 		//Debug.Log(string.Format("asds {0}",);
-		if (myGlobal.levels[levelNum] == null) {
-			myGlobal.levels[levelNum] = new Level();
+		if (myGlobal.gameData.levels[levelNum] == null) {
+			myGlobal.gameData.levels[levelNum] = new Level();
 		}
-		myGlobal.levels[levelNum].graviMinus = 0;
-		myGlobal.levels[levelNum].graviPlus = 0;
-		myGlobal.levels[levelNum].passed = false;
-		myGlobal.levels[levelNum].points = new Point[ggg.GetLength(0)];
+		myGlobal.gameData.levels[levelNum].graviMinus = 0;
+		myGlobal.gameData.levels[levelNum].graviPlus = 0;
+		myGlobal.gameData.levels[levelNum].passed = false;
+		myGlobal.gameData.levels[levelNum].points = new Point[ggg.GetLength(0)];
 		int i_=0;
 		foreach (GameObject g in ggg){
-			myGlobal.levels[levelNum].points[i_] = new Point(g.transform.position,g.GetComponent<pointScript>().gravity);
+			myGlobal.gameData.levels[levelNum].points[i_] = new Point(g.transform.position,g.GetComponent<pointScript>().gravity);
 			i_++;
 		}
 	}
 
 	void loadLevelData(){
-		if (myGlobal.levels[levelNum] != null) {
-			for (int i_=0; i_<myGlobal.levels[levelNum].points.GetLength(0); i_++){
-				GameObject g = Instantiate(PointPrefab,myGlobal.levels[levelNum].points[i_].getPos(),Quaternion.identity) as GameObject;
-				g.GetComponent<pointScript>().gravity = myGlobal.levels[levelNum].points[i_].GraviMass; 
+		if (myGlobal.gameData.levels[levelNum] != null) {
+			for (int i_=0; i_<myGlobal.gameData.levels[levelNum].points.GetLength(0); i_++){
+				GameObject g = Instantiate(PointPrefab,myGlobal.gameData.levels[levelNum].points[i_].getPos(),Quaternion.identity) as GameObject;
+				g.GetComponent<pointScript>().gravity = myGlobal.gameData.levels[levelNum].points[i_].GraviMass; 
 			}
 		}
 	}
@@ -119,8 +132,8 @@ public class scrLevel : MonoBehaviour {
 	
 	void LoadLevelsFromFile(string aFileName){
 		BinaryFormatter formatter = new BinaryFormatter();
-		FileStream fs = new FileStream(aFileName, FileMode.OpenOrCreate);
-		myGlobal.levels = (Level[])formatter.Deserialize(fs);
+		FileStream fs = new FileStream(Application.persistentDataPath + aFileName, FileMode.OpenOrCreate);
+		myGlobal.gameData = (GameData)formatter.Deserialize(fs);
 		//Debug.Log(string.Format("len = {0}|{1}",myGlobal.levels.GetLength(0),myGlobal.levels[0].points.GetLength(0)));
 		fs.Close();
 		
@@ -129,8 +142,8 @@ public class scrLevel : MonoBehaviour {
 	
 	void SaveLevelsToFile(string aFileName){
 		BinaryFormatter formatter = new BinaryFormatter();
-		FileStream fs = new FileStream(aFileName, FileMode.OpenOrCreate);
-		formatter.Serialize(fs, myGlobal.levels);
+		FileStream fs = new FileStream(Application.persistentDataPath + aFileName, FileMode.OpenOrCreate);
+		formatter.Serialize(fs, myGlobal.gameData);
 		fs.Close();
 		
 		Debug.Log("Serialization finished");

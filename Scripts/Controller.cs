@@ -100,29 +100,10 @@ public class Controller : MonoBehaviour {
 							Touch1Type = 7;//show menu
 							break;
 						}
-						//Touch1Type = 0; //ввести тип 9 - окончание нажатия?
 						break;
 				}
                 
 
-                /*if (Touch1Type==0){ //до этого ничего не нажимали
-					BeginTouch1 = Camera.main.ScreenToWorldPoint(Input.GetTouch(0).position);
-					//Touch1Time = Time.time;
-
-					ray = Camera.main.ScreenPointToRay(Input.GetTouch(0).position);
-					RaycastF = Physics.Raycast(ray, out hit, 100f);
-					//if (RaycastF) Debug.Log("raycast touch"+hit.collider.name);
-					if (RaycastF&&(hit.collider.CompareTag("point"))){ //проверяем что попали в гравиточку    если никуда не попали и долго держим - создать новую
-						point = hit.collider.gameObject;
-						//pointStartPos = point.transform.position;
-						Touch1Type = 1;       //movePoint = true;
-						//отобразить меню точки
-					} else {
-							Touch1Type = 2;
-							//cameraStartPos = camera.transform.position;
-						}
-
-				} */
 			} else if (Input.touchCount==2){ //ничего не двигаем - масштабируем экран
 					//TouchPos1 = Camera.main.ScreenToWorldPoint(Input.GetTouch(0).position);
 					//TouchPos2 = Camera.main.ScreenToWorldPoint(Input.GetTouch(1).position);
@@ -223,22 +204,26 @@ public class Controller : MonoBehaviour {
 				}
 				break;
 			case 6: //show menu point
-				//Debug.Log("show menu point");
-				if (pointControl != null){
-					//Debug.Log("call control"+point.name);
-					pointControl.GetComponent<scrPointControl>().showControl(point);
-				}
-				Touch1Type = 0; //ввести тип 10 - окончание нажатия?
+				Debug.Log("show menu point");
+                //GameObject.Find("Text").GetComponent<UnityEngine.UI.Text>().text = "show menu point";
+                    if (pointControl != null)
+                    {
+                        //Debug.Log("call control"+point.name);
+                        pointControl.GetComponent<scrPointControl>().showControl(point);
+                    }
+                    //else
+                      //  GameObject.Find("Text").GetComponent<UnityEngine.UI.Text>().text += " null";
+                Touch1Type = 0; //ввести тип 10 - окончание нажатия?
 				break;
 			case 7: //show menu screen
-				//Debug.Log("show menu screen");
+				Debug.Log("show menu screen");
 				Touch1Type = 0; //ввести тип 10 - окончание нажатия?
 				break;
 			case 8:
 				//Debug.Log("Touch1Type 8");
 				break;
 			case 9:
-				if (Camera.current.orthographic){
+				if (Input.touchCount>=2 && Camera.current.orthographic){
 					Camera.current.orthographicSize = beginOrtSize*((BeginTouch1 - BeginTouch2).magnitude/(TouchPos1-TouchPos2).magnitude);
 				}
 				break;
