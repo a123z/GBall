@@ -41,7 +41,7 @@ public class scrPortal1 : MonoBehaviour {
 		ball = aBall;
 		
         //тихо!!! 
-        gameObject.GetComponent<AudioSource>().Play();
+		if (myGlobal.getSound()) gameObject.GetComponent<AudioSource>().Play();
         return (true);
     }
 

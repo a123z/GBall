@@ -4,13 +4,24 @@ using UnityEngine.EventSystems;
 
 public class scrBallsPanel : MonoBehaviour {
 	GameObject rrr;
-	public GameObject point2DPrefab;
-	public GameObject point3DPrefab;
+	//public GameObject point2DPrefab; //не используется в скрипте 
+	GameObject point3DPrefab;
+	public int pointType=0;
+
 	// Use this for initialization
 	void Start () {
-	
+		if (GameObject.Find(myGlobal.goLevelName)==null) Debug.Log("goLevel not Found");
+		//point3DPrefab = (GameObject) UnityEditor.AssetDatabase.LoadAssetAtPath("Assets/Prefabs/"+myGlobal.pointPrefabName[pointType]+".prefab", typeof(GameObject));
+		point3DPrefab = (GameObject) Resources.Load(myGlobal.pointPrefabName[pointType]);
+		if (myGlobal.gameData == null) Debug.Log("gameData not init");
+
 	}   
-	
+
+	void Awake(){
+		if (myGlobal.gameData.specGrCount != null ) showCount();
+		else Debug.Log("specGrCount not init");
+	}
+
 	// Update is called once per frame
 	void Update () {
 	
@@ -21,6 +32,31 @@ public class scrBallsPanel : MonoBehaviour {
 			rrr.transform.position = rrr.transform.position + Vector3.left;
 		}
 	}*/
+
+	public void decPointCount(){
+		if (pointType!=0) {
+			myGlobal.gameData.specGrCount[pointType]--;
+			showCount();
+		}
+
+	}
+
+	public void showCount(){
+		switch (pointType){
+			case 0:
+				GameObject.Find("iBgrGrCount").GetComponentInChildren<UnityEngine.UI.Text>().text = "∞";
+				break;
+			case 1: 
+				GameObject.Find("iBgrAGrCount").GetComponentInChildren<UnityEngine.UI.Text>().text = myGlobal.gameData.specGrCount[pointType].ToString();
+				break;
+			case 2: 
+				GameObject.Find("iBgrPGrCount").GetComponentInChildren<UnityEngine.UI.Text>().text = myGlobal.gameData.specGrCount[pointType].ToString();
+				break;
+			default: 
+				gameObject.GetComponentInChildren<UnityEngine.UI.Text>().text = "0";
+				break;
+		}
+	}
 
 	public void moveUp(){
 		transform.position += Vector3.up;
@@ -74,9 +110,13 @@ public class scrBallsPanel : MonoBehaviour {
 		pos.z = 0;
 		//gameObject.
 		//Debug.Log(string.Format("pos {0}  {1}",gameObject.name,gameObject.transform.position));
-		GameObject.Instantiate(point3DPrefab,pos,Quaternion.identity);
+		if (pointType==0 || myGlobal.gameData.specGrCount[pointType]>0){
+			GameObject.Instantiate(point3DPrefab,pos,Quaternion.identity);
+			decPointCount();
+		}
+
 		Destroy(rrr);
-	myGlobal.UIClick = false;
+		myGlobal.UIClick = false;
 		//rrr = null;
 	}
 

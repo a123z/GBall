@@ -184,7 +184,7 @@ public class Controller : MonoBehaviour {
 				break;
 			case 3: //нажали в точку и двигали
 				tempV3 = TouchPos1 - BeginTouch1;
-				if (tempV3.sqrMagnitude > 0.03f) {
+				if (tempV3.sqrMagnitude > 0.02f) {
 					//Camera.main.ScreenToViewportPoint();
 					point.transform.position = point.transform.position + tempV3;
 					BeginTouch1 = TouchPos1;
@@ -205,7 +205,6 @@ public class Controller : MonoBehaviour {
 				break;
 			case 6: //show menu point
 				Debug.Log("show menu point");
-                //GameObject.Find("Text").GetComponent<UnityEngine.UI.Text>().text = "show menu point";
                     if (pointControl != null)
                     {
                         //Debug.Log("call control"+point.name);

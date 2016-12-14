@@ -1,19 +1,39 @@
 fileFormatVersion: 2
-guid: 324c0c524cede2842b3417afa593a3c0
-timeCreated: 1448387052
+guid: f7a40e379e886d844bef7ef7f4bdbada
+timeCreated: 1479149088
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
-    21300000: gui_img_0
-    21300002: gui_img_1
-    21300004: gui_img_2
-    21300006: gui_img_3
-    21300008: gui_img_4
-    21300010: gui_img_5
-    21300012: gui_img_6
-    21300014: gui_img_7
-    21300016: gui_img_8
-    21300018: gui_img_9
+    21300000: gui_img 1_0
+    21300002: gui_img 1_1
+    21300004: gui_img 1_2
+    21300006: gui_img 1_3
+    21300008: gui_img 1_4
+    21300010: gui_img 1_5
+    21300012: gui_img 1_6
+    21300014: gui_img 1_7
+    21300016: gui_img 1_8
+    21300018: gui_img 1_9
+    21300020: gui_img 1_10
+    21300022: gui_img 1_11
+    21300024: gui_img 1_12
+    21300026: gui_img 1_13
+    21300028: gui_img_0
+    21300030: gui_img_1
+    21300032: gui_img_2
+    21300034: gui_img_3
+    21300036: gui_img_4
+    21300038: gui_img_5
+    21300040: gui_img_6
+    21300042: gui_img_7
+    21300044: gui_img_8
+    21300046: gui_img_9
+    21300048: gui_img_10
+    21300050: gui_img_11
+    21300052: gui_img_12
+    21300054: gui_img_13
+    21300056: gui_img_14
+    21300058: gui_img_15
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -27,13 +47,13 @@ TextureImporter:
   bumpmap:
     convertToNormalMap: 0
     externalNormalMap: 0
-    heightScale: .25
+    heightScale: 0.25
     normalMapFilter: 0
   isReadable: 0
   grayScaleToAlpha: 0
   generateCubemap: 0
   cubemapConvolution: 0
-  cubemapConvolutionSteps: 8
+  cubemapConvolutionSteps: 7
   cubemapConvolutionExponent: 1.5
   seamlessCubemap: 0
   textureFormat: -1
@@ -47,19 +67,23 @@ TextureImporter:
   lightmap: 0
   rGBM: 0
   compressionQuality: 50
+  allowsAlphaSplitting: 0
   spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
-  spritePivot: {x: .5, y: .5}
+  spritePivot: {x: 0.5, y: 0.5}
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spritePixelsToUnits: 100
   alphaIsTransparency: 1
+  spriteTessellationDetail: -1
   textureType: 8
   buildTargetSettings: []
   spriteSheet:
+    serializedVersion: 2
     sprites:
-    - name: gui_img_0
+    - serializedVersion: 2
+      name: gui_img_0
       rect:
         serializedVersion: 2
         x: 0
@@ -69,7 +93,10 @@ TextureImporter:
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: gui_img_1
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: gui_img_1
       rect:
         serializedVersion: 2
         x: 128
@@ -79,7 +106,36 @@ TextureImporter:
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: gui_img_2
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: gui_img_2
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 512
+        width: 128
+        height: 128
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: gui_img_3
+      rect:
+        serializedVersion: 2
+        x: 384
+        y: 512
+        width: 128
+        height: 128
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: gui_img_4
       rect:
         serializedVersion: 2
         x: 0
@@ -89,7 +145,10 @@ TextureImporter:
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: gui_img_3
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: gui_img_5
       rect:
         serializedVersion: 2
         x: 128
@@ -99,7 +158,23 @@ TextureImporter:
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: gui_img_4
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: gui_img_6
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 384
+        width: 128
+        height: 128
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: gui_img_7
       rect:
         serializedVersion: 2
         x: 0
@@ -109,7 +184,10 @@ TextureImporter:
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: gui_img_5
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: gui_img_8
       rect:
         serializedVersion: 2
         x: 128
@@ -119,7 +197,23 @@ TextureImporter:
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: gui_img_6
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: gui_img_9
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 256
+        width: 128
+        height: 128
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: gui_img_10
       rect:
         serializedVersion: 2
         x: 0
@@ -129,7 +223,10 @@ TextureImporter:
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: gui_img_7
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: gui_img_11
       rect:
         serializedVersion: 2
         x: 128
@@ -139,7 +236,23 @@ TextureImporter:
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: gui_img_8
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: gui_img_12
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 128
+        width: 128
+        height: 128
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: gui_img_13
       rect:
         serializedVersion: 2
         x: 0
@@ -149,7 +262,10 @@ TextureImporter:
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: gui_img_9
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: gui_img_14
       rect:
         serializedVersion: 2
         x: 128
@@ -159,6 +275,22 @@ TextureImporter:
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: gui_img_15
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 0
+        width: 128
+        height: 128
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    outline: []
   spritePackingTag: 
   userData: 
   assetBundleName: 

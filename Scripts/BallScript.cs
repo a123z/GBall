@@ -17,9 +17,8 @@ public class BallScript : MonoBehaviour {
 	float maxHeight=0;
 	float tmpFloat;
 	float startFlightTime=0;
-
 	// Use this for initialization
-	void Start () {
+	public void Start () {
 		basket = GameObject.FindGameObjectWithTag("basket");
 		portal = GameObject.FindGameObjectWithTag("portal");
 
@@ -33,27 +32,43 @@ public class BallScript : MonoBehaviour {
 
 	void FixedUpdate () {
 		GameObject[] GObjs;
-		GObjs = GameObject.FindGameObjectsWithTag("points");
+		GObjs = GameObject.FindGameObjectsWithTag("points"); //получить все точки на уровне
 		Vector3 Grav=Vector3.zero;
-		foreach (GameObject GObj in GObjs) {
-			tV3 = GetGravity(-transform.position+GObj.transform.position, GObj.GetComponent<pointScript>().gravity);
+		Vector3 tV3;
+		foreach (GameObject GObj in GObjs) { //посчитаем гравитационное воздействие от действующих точек
+			if (!GObj.GetComponent<pointScript>().pointOn) continue;
+			int idxGr=1;
+			switch (GObj.GetComponent<pointScript>().pointType) {
+				case 0: //обычная точка - притягивающая 
+					goto default; 
+				case 1: //антигравитационная точка
+					idxGr=-1;
+					break;
+				case 2: //пульсирующая точка
+					tV3 = (GObj.transform.position - transform.position).normalized + transform.GetComponent<Rigidbody>().velocity.normalized;
+					if (tV3.sqrMagnitude>1f && (GObj.transform.position - transform.position).sqrMagnitude > 2f) idxGr = 1; //если приближается - притягивать
+						else idxGr = -1; //если удаляется - отталкивать
+					break;
+				default:
+					idxGr=1;
+					break;
+			}
+			tV3 = GetGravity(-transform.position+GObj.transform.position, idxGr*GObj.GetComponent<pointScript>().gravity);
 			if (tV3.sqrMagnitude>1){
 			//if ((GObj.transform.position-transform.position).sqrMagnitude<200){
 				Grav += tV3;
 			}
 		}
-		//Debug.Log(string.Format("deltatime={0} grav={1}",Time.fixedDeltaTime, Grav.magnitude));
-		//i++;
-		gameObject.GetComponent<ConstantForce>().force = Grav;
-		if ((gameObject.transform.position.y<-30)&&!teleportRun){
-			//Debug.Log(string.Format("calc count={0}, y={1}",i,gameObject.transform.position.y));
-			//i=0;
-			//teleportRun = true;
-			//GameObject.Find("pfPortal1").GetComponent<scrPortal1>().RunTeleport();
-			teleportRun = portal.GetComponent<scrPortal1>().RunTeleport(gameObject);
-			//GoToStart();
 
+		//добавим воздействие расчитанной гравитации на шар
+		gameObject.GetComponent<ConstantForce>().force = Grav;  
+
+		//если шар ушёл вниз ниже 30 - вернем его
+		if ((gameObject.transform.position.y<-30)&&!teleportRun){
+			teleportRun = portal.GetComponent<scrPortal1>().RunTeleport(gameObject);
 		}
+
+		//проверим что шар действительно в корзине
 		if (basket!=null &&(basket.transform.position-gameObject.transform.position).sqrMagnitude<0.5f){
 			if (WaitPass<=0){
 				BasketPass++;
@@ -71,13 +86,15 @@ public class BallScript : MonoBehaviour {
 			//Debug.Log(string.Format("pass={0}",BasketPass));
 		} else if (BasketPass>0)BasketPass=0;
 
+
+		//для расчёта доп. очков посчитаем макс. скорость и высоту
 		tmpFloat = gameObject.GetComponent<Rigidbody>().velocity.sqrMagnitude;
 		if (tmpFloat>maxSpeed) maxSpeed = tmpFloat;
 
 		if (maxHeight<gameObject.transform.position.y) maxHeight = gameObject.transform.position.y;
 	}
 
-	Vector3 GetGravity(Vector3 dest, float gravity){
+	Vector3 GetGravity(Vector3 dest, float gravity){ //
 		//float res = G*m1*gravity/dest.sqrMagnitude;
 		//Mathf.Floor
 		return(dest.normalized*m1*gravity/dest.sqrMagnitude);

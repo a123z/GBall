@@ -1,11 +1,13 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 public class scrResult : MonoBehaviour {
+	int currentLevel;
 
 	// Use this for initialization
 	void Start () {
-		Debug.Log("Start scrResult");
+		Debug.Log("!!!!!!!!!!    Start scrResult");
 	}
 	
 	// Update is called once per frame
@@ -17,7 +19,7 @@ public class scrResult : MonoBehaviour {
 		GetComponent<Canvas>().enabled = true;
 		myGlobal.UIClick = true;
 
-
+		currentLevel = GameObject.Find("goLevel").GetComponent<scrLevel>().levelNum;
 
 		GameObject.Find("txtTime_scr").GetComponent<UnityEngine.UI.Text>().text = Mathf.FloorToInt((Time.realtimeSinceStartup - myGlobal.StartLevelTime)/60).ToString()+
 			":"+Mathf.FloorToInt((Time.realtimeSinceStartup - myGlobal.StartLevelTime)%60).ToString();
@@ -37,14 +39,30 @@ public class scrResult : MonoBehaviour {
 
 		GameObject.Find("txtScore_scr").GetComponent<UnityEngine.UI.Text>().text = myGlobal.gameData.score.ToString();
 
+		myGlobal.gameData.levels[currentLevel].passed = true;
+		GameObject.Find("goLevel").GetComponent<scrLevel>().SaveLevel();
+
 	}
 
 	public void NextLevel(){
 		GameObject tGO = GameObject.Find("goLevel");
+		Debug.Log("next level");
 		if (tGO!=null){
+			Debug.Log("nL f GO");
 			if (tGO.GetComponent<scrLevel>().levelNum < myGlobal.levelsCount){
 				tGO.GetComponent<scrLevel>().loadNextLevel(); 
-			}
+			} else myGlobal.loadLevel(1);
 		}
+	}
+
+	public void Restart(){
+		myGlobal.UIClick = false;
+		GetComponent<Canvas>().enabled = false;
+		GameObject.Find("pfPortal").GetComponent<scrPortal1>().RunTeleport(GameObject.Find("Ball"));
+		GameObject.Find("Ball").GetComponent<BallScript>().Start();
+	}
+
+	public void LoadLevelSelect(){
+		SceneManager.LoadScene("levelSelect");
 	}
 }

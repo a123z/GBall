@@ -4,6 +4,7 @@ using System.Collections;
 public class pointScript : MonoBehaviour {
 	public float gravity=10f;
 	public bool pointOn=true;
+	public int pointType=0;
 
 	protected int selectstate=1;
 	// Use this for initialization
@@ -35,12 +36,18 @@ public class pointScript : MonoBehaviour {
 
 	public void SetPointOn(){
 		pointOn = true;
-		gameObject.GetComponent<Material>().color = Color.blue;
+		gameObject.GetComponent<MeshRenderer>().material.color = Color.blue;
+		if (gameObject.GetComponent<MeshRenderer>().material.HasProperty("emission")){
+			gameObject.GetComponent<MeshRenderer>().material.SetFloat("Emission",0);
+		} else Debug.Log("no prop");
 	}
 
 	public void SetPointOff(){
 		pointOn = false;
-		gameObject.GetComponent<Material>().color = Color.gray;
+		gameObject.GetComponent<MeshRenderer>().material.color = Color.gray;
+		if (gameObject.GetComponent<MeshRenderer>().material.HasProperty("Emission")){
+			gameObject.GetComponent<MeshRenderer>().material.SetFloat("Emission",0.5f);
+		}
 	}
 
 	public int GetSelectState(){
