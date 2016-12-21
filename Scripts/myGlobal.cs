@@ -10,7 +10,7 @@ public static class myGlobal{
 	public static int musicVolume;
 	public static bool UIClick;
 	//public static scrLevel.Level[] levels;
-	public static scrLevel.GameData gameData;
+	public static scrClasses.GameData gameData;
 	public static string saveFileName="points.dat";
 	public static string[] pointPrefabName = new string[10] {"pfPoint0","pfPoint1","pfPoint2","","","","","","",""};
 	//public static int Gr; 
@@ -30,8 +30,8 @@ public static class myGlobal{
 
 	public static void Init(){
 		UnityEngine.Debug.Log("init");
-		gameData = new scrLevel.GameData();
-		gameData.levels = new scrLevel.Level[myGlobal.levelsCount];
+		gameData = new scrClasses.GameData();
+		gameData.levels = new scrClasses.Level[myGlobal.levelsCount];
 		gameData.specGrCount = new int[10] {0,0,0,0,0,0,0,0,0,0};
 		gameData.gr = GrDefault;
 		//for (int i=0;i<levelsCount;i++){

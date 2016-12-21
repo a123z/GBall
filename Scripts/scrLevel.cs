@@ -23,7 +23,7 @@ public class scrLevel : MonoBehaviour {
 			myGlobal.Init();
 			LoadLevelsFromFile(myGlobal.saveFileName);
 			if (myGlobal.gameData.levels.Length < myGlobal.levelsCount){
-					myGlobal.gameData.levels = new scrLevel.Level[myGlobal.levelsCount];
+				myGlobal.gameData.levels = new scrClasses.Level[myGlobal.levelsCount];
 			}
 		}
 		loadLevelData();
@@ -62,16 +62,16 @@ public class scrLevel : MonoBehaviour {
 		//Debug.Log(string.Format("asds {0} lvl len ={1}   {2}  {3}",ggg.GetLength(0),myGlobal.levels.GetLength(0),levelNum, myGlobal.levels[levelNum]==null ));
 		//Debug.Log(string.Format("asds {0}",);
 		if (myGlobal.gameData.levels[levelNum] == null) {
-			myGlobal.gameData.levels[levelNum] = new Level();
+			myGlobal.gameData.levels[levelNum] = new scrClasses.Level();
 		}
 		myGlobal.gameData.levels[levelNum].graviMinus = 0;
 		myGlobal.gameData.levels[levelNum].graviPlus = 0;
 		//myGlobal.gameData.levels[levelNum].passed = false;
 		GameObject[] ggg = GameObject.FindGameObjectsWithTag("points");
-		myGlobal.gameData.levels[levelNum].points = new Point[ggg.GetLength(0)];
+		myGlobal.gameData.levels[levelNum].points = new scrClasses.Point[ggg.GetLength(0)];
 		int i_=0;
 		foreach (GameObject g in ggg){
-			myGlobal.gameData.levels[levelNum].points[i_] = new Point(g.transform.position,g.GetComponent<pointScript>().gravity, g.GetComponent<pointScript>().pointType);
+			myGlobal.gameData.levels[levelNum].points[i_] = new scrClasses.Point(g.transform.position,g.GetComponent<pointScript>().gravity, g.GetComponent<pointScript>().pointType);
 			i_++;
 		}
 		for (i_=0; i_<myGlobal.gameData.levels[levelNum].prizeCount.Length;i_++){
@@ -110,77 +110,11 @@ public class scrLevel : MonoBehaviour {
 			}
 		} else {
 			Debug.Log("Level is null");
-			myGlobal.gameData.levels[levelNum] = new Level();
+			myGlobal.gameData.levels[levelNum] = new scrClasses.Level();
 			myGlobal.gameData.levels[levelNum].prizeCount = przCnt;//new int[10]  {0,2,1,0,0,0,0,0,0,0};
 		}
 	}
-
-	[System.Serializable]
-	public class Point
-	{
-		float _x {get; set;}
-		float _y {get; set;}
-		float _z {get; set;}
-		public float GraviMass;
-		public bool enabled;
-		public int pType;
 		
-		//constructor
-		public Point(Vector3 pos, float gravi, int pointType=0)
-		{
-			_x = pos.x;
-			_y = pos.y;
-			_z = pos.z;
-			GraviMass = gravi;
-			pType = pointType;
-		}
-		
-		public float getGraviForce(){
-			return (GraviMass * 5f);
-		}
-		
-		public void setPos(Vector3 position){
-			_x = position.x;
-			_y = position.y;
-			_z = position.z;
-			//return (new Vector3(_x, _y, _z));
-		}
-		
-		public Vector3 getPos(){
-			return (new Vector3(_x, _y, _z)); 
-		}
-	}
-	
-	[System.Serializable]
-	public class Level
-	{
-		public Point[] points;
-		public bool passed;
-		public int highScore;
-		public int[] prizeCount;
-		//public int usedGr;
-
-		public int graviPlus;
-		public int graviMinus;
-	}
-
-	[System.Serializable]
-	public class GameData
-	{
-		public int score;
-		public int lastLevel;
-		public int gr;
-		public Level[] levels;
-		public int[] specGrCount; //points count: 0-base graviti 1-Anti gravity 2-pulse gravity 3-inverse gravity 
-		public bool soundOn;
-		public bool musicOn;
-		//public int aGrCount;  //Anti gravity points count
-		//public int pGrCount;  //pulse gravity points count
-		//public int iGrCount;  //inverse gravity points count
-		//or need use array????
-
-	}
-	
 	void OnApplicationQuit() {
 		saveLevelData();
 		SaveLevelsToFile(myGlobal.saveFileName);
@@ -189,7 +123,7 @@ public class scrLevel : MonoBehaviour {
 	void LoadLevelsFromFile(string aFileName){
 		BinaryFormatter formatter = new BinaryFormatter();
 		FileStream fs = new FileStream(Application.persistentDataPath + aFileName, FileMode.OpenOrCreate);
-		myGlobal.gameData = (GameData)formatter.Deserialize(fs);
+		myGlobal.gameData = (scrClasses.GameData)formatter.Deserialize(fs);
 		//Debug.Log(string.Format("len = {0}|{1}",myGlobal.levels.GetLength(0),myGlobal.levels[0].points.GetLength(0)));
 		fs.Close();
 		
