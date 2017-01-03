@@ -120,4 +120,11 @@ public class scrBallsPanel : MonoBehaviour {
 		//rrr = null;
 	}
 
+	public void btnClick(BaseEventData bde){
+		Debug.Log("just click");
+		myGlobal.UIClick = true;
+		GameObject.Find("svTextInfo").SetActive(true);
+		//transform.GetComponent<scrTextInfo>().ShowText();
+	}
+
 }

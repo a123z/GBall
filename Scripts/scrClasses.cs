@@ -50,6 +50,15 @@ public class scrClasses// : MonoBehaviour
 
 		public int graviPlus;
 		public int graviMinus;
+
+		public Level(){
+			passed = false;
+			highScore = 0;
+			graviPlus = 0;
+			graviMinus = 0;
+			points = new Point[0];
+			prizeCount = new int[0];
+		}
 	}
 
 	[System.Serializable]

@@ -52,12 +52,17 @@ public class Controller : MonoBehaviour {
 			//Debug.Log(string.Format("wheel {0}",));
 		}
 
-		if ((Input.touchCount>0)||(Input.GetMouseButton(0))||(Input.GetMouseButtonUp(0))) {
+		if ((Input.touchCount>0)
+			||(Input.GetMouseButton(0))
+			||(Input.GetMouseButtonUp(0))) {
             if (
-                UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject () || myGlobal.UIClick ||
-                (Input.touchCount > 0 && UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject(Input.GetTouch(0).fingerId))
+                UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject () 
+				|| myGlobal.UIClick 
+				|| (Input.touchCount > 0 && UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject(Input.GetTouch(0).fingerId))
                )
             {
+				Debug.Log("hide");
+				GameObject.Find("svTextInfo").SetActive(false);
 				return;
 			}
 	    	if (Input.touchCount==1){ //одно нажатие - двигаем точку или управляем параметрами

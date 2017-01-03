@@ -40,7 +40,7 @@ public class scrResult : MonoBehaviour {
 		GameObject.Find("txtScore_scr").GetComponent<UnityEngine.UI.Text>().text = myGlobal.gameData.score.ToString();
 
 		myGlobal.gameData.levels[currentLevel].passed = true;
-		GameObject.Find("goLevel").GetComponent<scrLevel>().SaveLevel();
+		GameObject.Find("goLevel").GetComponent<scrLevel>().saveLevelData();
 
 	}
 

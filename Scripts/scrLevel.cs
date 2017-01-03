@@ -1,8 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
-using System.Runtime.Serialization.Formatters.Binary;
-using System.IO;
-using UnityEngine.SceneManagement;
+//using UnityEngine.SceneManagement;
 
 public class scrLevel : MonoBehaviour {
 	public int levelNum=0; //номер уровня 0-стартовый экран
@@ -10,7 +8,7 @@ public class scrLevel : MonoBehaviour {
 	public int graviMinus; //сколько истрачено гравитонов за уровень
 	public float HighSpeed = 5f;	//скорость выше которой насчитываются бонусы
 	public float LargeHeight = 40f;  //высота выше которой насчитываются бонусы
-	public int[] przCnt;
+	public int[] przCnt;   //кол-во призов при первом проходе уровня
 	/*public GameObject Point0Prefab;
 	public GameObject Point1Prefab;
 	public GameObject Point2Prefab;*/
@@ -18,26 +16,28 @@ public class scrLevel : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		Debug.Log("scrLevel start");
-		if ((levelNum==0)||myGlobal.gameData==null){
-			myGlobal.Init();
-			LoadLevelsFromFile(myGlobal.saveFileName);
-			if (myGlobal.gameData.levels.Length < myGlobal.levelsCount){
-				myGlobal.gameData.levels = new scrClasses.Level[myGlobal.levelsCount];
-			}
-		}
-		loadLevelData();
-        myGlobal.UIClick = false;
 		//print(Application.persistentDataPath.ToString());
-		myGlobal.StartLevelTime = Time.realtimeSinceStartup;
-
+		Debug.Log("scrLevel start " + levelNum.ToString());
+		//if ((levelNum==0)||myGlobal.gameData==null){ //если первый уровень или данные ещё не загружены
+		if (myGlobal.gameData == null){ //если данные ещё не загружены
+			myGlobal.Init(); //инициализируем массивы данных
+			myGlobal.LoadLevelsFromFile(myGlobal.saveFileName); //заполняем данными из файла сохранения
+		}
+		//Debug.Log(przCnt.Length.ToString());
+		//if (myGlobal.gameData.levels[levelNum].prizeCount == null) myGlobal.gameData.levels[levelNum].prizeCount = przCnt;
+		loadLevelData(); //загружаем сцену из массива данных
+		myGlobal.UIClick = false; 
+		
+		myGlobal.StartLevelTime = Time.realtimeSinceStartup;//запоминаем время для рассчёта времени прохождения
 		Debug.Log("start time "+myGlobal.StartLevelTime.ToString());
+
 		if (myGlobal.gameData.gr<=0) myGlobal.gameData.gr = 300; //for debug
 
-		foreach (GameObject g in GameObject.FindGameObjectsWithTag("prizeArea")){
+		//отключим видимость зон для размещения призов (они должны быть видимы только на этапе создания уровня)
+		foreach (GameObject g in GameObject.FindGameObjectsWithTag("prizeArea")){ 
 			g.GetComponent<MeshRenderer>().enabled = false;
 		}
-		//if (PrefabPrize != null)GameObject.Instantiate(PrefabPrize);
+
 
 	}
 
@@ -52,10 +52,9 @@ public class scrLevel : MonoBehaviour {
 
 	public void loadNextLevel(){
 		saveLevelData();
-        //Application.LoadLevel(levelNum + 1);
-		SceneManager.LoadScene("level" + (levelNum+1).ToString());
-        //SceneManager.LoadScene(levelNum + 1);
-    }
+		myGlobal.loadLevel(levelNum+1);
+		//SceneManager.LoadScene("level" + (levelNum+1).ToString());
+	}
 
 	public void saveLevelData(){
 		
@@ -74,9 +73,12 @@ public class scrLevel : MonoBehaviour {
 			myGlobal.gameData.levels[levelNum].points[i_] = new scrClasses.Point(g.transform.position,g.GetComponent<pointScript>().gravity, g.GetComponent<pointScript>().pointType);
 			i_++;
 		}
-		for (i_=0; i_<myGlobal.gameData.levels[levelNum].prizeCount.Length;i_++){
+		//обнулим кол-во призов в массиве
+		Debug.Log( myGlobal.gameData.levels[levelNum].prizeCount.GetLength(0).ToString());
+		for (i_=0; i_<myGlobal.gameData.levels[levelNum].prizeCount.GetLength(0);i_++){
 			myGlobal.gameData.levels[levelNum].prizeCount[i_] = 0;
 		}
+		//посчитаем кол-во призов на сцене и запишем в массив
 		ggg = GameObject.FindGameObjectsWithTag("prize");
 		foreach (GameObject g in ggg){
 			myGlobal.gameData.levels[levelNum].prizeCount[g.GetComponent<scrPrize>().prizeType]++;
@@ -88,64 +90,52 @@ public class scrLevel : MonoBehaviour {
 		if (myGlobal.gameData.specGrCount == null) myGlobal.gameData.specGrCount = new int[10] {0,10,10,0,0,0,0,0,0,0};
 		if (myGlobal.gameData.levels[levelNum] != null) {
 			for (int i_=0; i_<myGlobal.gameData.levels[levelNum].points.GetLength(0); i_++){
-				GameObject g = Instantiate(
-									((GameObject) Resources.Load(myGlobal.pointPrefabName[myGlobal.gameData.levels[levelNum].points[i_].pType])),
-									//((GameObject) UnityEditor.AssetDatabase.LoadAssetAtPath("Assets/Prefabs/"+myGlobal.pointPrefabName[myGlobal.gameData.levels[levelNum].points[i_].pType]+".prefab", typeof(GameObject))),
-									myGlobal.gameData.levels[levelNum].points[i_].getPos(),
-									Quaternion.identity
-								) as GameObject;
-				g.GetComponent<pointScript>().gravity = myGlobal.gameData.levels[levelNum].points[i_].GraviMass; 
-				g.GetComponent<pointScript>().pointType = myGlobal.gameData.levels[levelNum].points[i_].pType; 
+				//if (myGlobal.gameData.levels[levelNum].points[i_] != null){
+					GameObject g = Instantiate(
+										((GameObject) Resources.Load(myGlobal.pointPrefabName[myGlobal.gameData.levels[levelNum].points[i_].pType])),
+										//((GameObject) UnityEditor.AssetDatabase.LoadAssetAtPath("Assets/Prefabs/"+myGlobal.pointPrefabName[myGlobal.gameData.levels[levelNum].points[i_].pType]+".prefab", typeof(GameObject))),
+										myGlobal.gameData.levels[levelNum].points[i_].getPos(),
+										Quaternion.identity
+									) as GameObject;
+					g.GetComponent<pointScript>().gravity = myGlobal.gameData.levels[levelNum].points[i_].GraviMass; 
+					g.GetComponent<pointScript>().pointType = myGlobal.gameData.levels[levelNum].points[i_].pType; 
+				//}
 			}
-			if (myGlobal.gameData.levels[levelNum].prizeCount != null){
-				for (int i_=0; i_<myGlobal.gameData.levels[levelNum].prizeCount.Length-1; i_++){
-					for (int i2_= 0; i2_ < myGlobal.gameData.levels[levelNum].prizeCount[i_];i2_++){
+			if (myGlobal.gameData.levels[levelNum].prizeCount != null){ //есть данные о призах
+				for (int i_=0; i_<myGlobal.gameData.levels[levelNum].prizeCount.Length-1; i_++){ //для каждого типа призов
+					for (int i2_= 0; i2_ < myGlobal.gameData.levels[levelNum].prizeCount[i_];i2_++){ //создадим указанное кол-во призов
 						GameObject po = GameObject.Instantiate(PrefabPrize);
-						po.GetComponent<scrPrize>().prizeType = i2_;
+						po.GetComponent<scrPrize>().prizeType = i_;
 					}
 				}
 			} else {
 				Debug.Log("prizeCount is null");
+				//данные о призах отсутствует - создадим данные по призам
 				myGlobal.gameData.levels[levelNum].prizeCount = przCnt;
 			}
 		} else {
 			Debug.Log("Level is null");
+			//если уровень отсутствует - т.е. его раньше не проходили - создадим данные по уровню
 			myGlobal.gameData.levels[levelNum] = new scrClasses.Level();
 			myGlobal.gameData.levels[levelNum].prizeCount = przCnt;//new int[10]  {0,2,1,0,0,0,0,0,0,0};
 		}
 	}
 		
-	void OnApplicationQuit() {
+	/*public void SaveLevel(){
 		saveLevelData();
-		SaveLevelsToFile(myGlobal.saveFileName);
-	}
-	
-	void LoadLevelsFromFile(string aFileName){
-		BinaryFormatter formatter = new BinaryFormatter();
-		FileStream fs = new FileStream(Application.persistentDataPath + aFileName, FileMode.OpenOrCreate);
-		myGlobal.gameData = (scrClasses.GameData)formatter.Deserialize(fs);
-		//Debug.Log(string.Format("len = {0}|{1}",myGlobal.levels.GetLength(0),myGlobal.levels[0].points.GetLength(0)));
-		fs.Close();
-		
-		Debug.Log("Deserialization finished");
-	}
-	
-	void SaveLevelsToFile(string aFileName){
-		BinaryFormatter formatter = new BinaryFormatter();
-		FileStream fs = new FileStream(Application.persistentDataPath + aFileName, FileMode.OpenOrCreate);
-		formatter.Serialize(fs, myGlobal.gameData);
-		fs.Close();
-		
-		Debug.Log("Serialization finished");
-	}
+		myGlobal.SaveLevelsToFile(myGlobal.saveFileName);
+	}*/
 
-	public void SaveLevel(){
-		saveLevelData();
-		SaveLevelsToFile(myGlobal.saveFileName);
-	}
-
-	public void GameExit(){
+	public void GameExit(){ //вызывается по кнопке выход в UI
 		Application.Quit();
 	}
+
+	void OnApplicationQuit() { //unity event
+		//SaveLevelsToFile(myGlobal.saveFileName);
+		//SaveLevel();
+		saveLevelData();
+		myGlobal.SaveLevelsToFile(myGlobal.saveFileName);
+	}
+
 
 }

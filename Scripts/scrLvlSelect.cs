@@ -40,9 +40,11 @@ public class scrLvlSelect : MonoBehaviour {
 				x_ = 1;
 				y_++;
 			}
-			if (myGlobal.gameData.levels[i] != null)
+			//Debug.Log(myGlobal.gameData.levels[1].passed.ToString());
+			if (myGlobal.gameData.levels[i] != null){
+				Debug.Log("lvl "+i.ToString());
 				SetLevelProp(objBtnLvl, i==1||myGlobal.gameData.levels[i-1].passed, myGlobal.gameData.levels[i].passed); //opened||passed
-			else SetLevelProp(objBtnLvl, false, false);
+			} else SetLevelProp(objBtnLvl, false, false);
 			//SetLevelProp(i, i==1, false);
 			//SetLevelProp(i, i==1);
 
