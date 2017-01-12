@@ -61,8 +61,8 @@ public class Controller : MonoBehaviour {
 				|| (Input.touchCount > 0 && UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject(Input.GetTouch(0).fingerId))
                )
             {
-				Debug.Log("hide");
-				GameObject.Find("svTextInfo").SetActive(false);
+				//Debug.Log("hide");
+				//GameObject.Find("svTextInfo").SetActive(false);
 				return;
 			}
 	    	if (Input.touchCount==1){ //одно нажатие - двигаем точку или управляем параметрами
@@ -134,6 +134,7 @@ public class Controller : MonoBehaviour {
 						}*/
 		  		} 
 			if (Input.GetMouseButton(0)){
+				Debug.Log("mouse click");
 				TouchPos1 = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 				if (Input.GetMouseButtonDown(0)){
 					Touch1Type = 1; //куда-то нажали
@@ -193,6 +194,7 @@ public class Controller : MonoBehaviour {
 					//Camera.main.ScreenToViewportPoint();
 					point.transform.position = point.transform.position + tempV3;
 					BeginTouch1 = TouchPos1;
+					myGlobal.currentLevel.noChangeAfterTeleport = false;
 				}
 				break;
 			case 4: //Нажали в пустое место скрыть меню точки если открыто

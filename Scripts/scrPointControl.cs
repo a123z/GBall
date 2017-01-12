@@ -13,10 +13,6 @@ public class scrPointControl : MonoBehaviour {
 	float dWaitRepeat = 0.5f;
 
 	// Use this for initialization
-	void Start () {
-        Debug.Log("start scrPointControl");
-
-	}
 
 	void Awake(){
 		VJ = GameObject.Find("pfCanvas/VJoystick");
@@ -24,7 +20,12 @@ public class scrPointControl : MonoBehaviour {
 		initPointControl();
 		updatePowerText();
 	}
-	
+
+	void Start () {
+		Debug.Log("start scrPointControl");
+
+	}
+
     void initPointControl()
     {
         if (grCount == null) grCount = GameObject.Find("txtGr");
@@ -69,11 +70,12 @@ public class scrPointControl : MonoBehaviour {
 		}
 	}
 
-	public void gravityPlus(){
+	/*public void gravityPlus(){
 		if ((myGlobal.gameData.gr-myGlobal.deltaGr)>=0){
 			myGlobal.gameData.gr += -myGlobal.deltaGr;
 			point.GetComponent<pointScript>().SetGravity(point.GetComponent<pointScript>().GetGravity()+myGlobal.deltaGr);
 			updatePowerText();
+			myGlobal.currentLevel.noChangeAfterTeleport = false;
 		};
 	}
 
@@ -82,8 +84,9 @@ public class scrPointControl : MonoBehaviour {
 			myGlobal.gameData.gr += myGlobal.deltaGr;
 			point.GetComponent<pointScript>().SetGravity(point.GetComponent<pointScript>().GetGravity()-myGlobal.deltaGr);
 			updatePowerText();
+			myGlobal.currentLevel.noChangeAfterTeleport = false;
 		}
-	}
+	}*/
 
 	void gravityChange(int type){
 		if ((type == 1 && (myGlobal.gameData.gr-myGlobal.deltaGr)>=0)||
@@ -91,6 +94,7 @@ public class scrPointControl : MonoBehaviour {
 			myGlobal.gameData.gr += -myGlobal.deltaGr*type;
 			point.GetComponent<pointScript>().SetGravity(point.GetComponent<pointScript>().GetGravity()+type*myGlobal.deltaGr);
 			updatePowerText();
+			myGlobal.currentLevel.noChangeAfterTeleport = false;
 		};
 	}
 
@@ -105,12 +109,18 @@ public class scrPointControl : MonoBehaviour {
 		if (t>0) myGlobal.gameData.specGrCount[t]++;
 		Destroy(point);
 		updatePowerText();
+		foreach (scrBallsPanel g in GameObject.Find("panPoints").transform.GetComponentsInChildren<scrBallsPanel>()){
+			g.showCount();
+		}
+
 		hideControl();
+		myGlobal.currentLevel.noChangeAfterTeleport = false;
 	}
 
 	public void onOffPoint(){
 		if (point.GetComponent<pointScript>().pointOn) point.GetComponent<pointScript>().SetPointOff();
 		else point.GetComponent<pointScript>().SetPointOn();
+		myGlobal.currentLevel.noChangeAfterTeleport = false;
 	}
 
 	public void stopPress(){

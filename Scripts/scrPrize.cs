@@ -19,6 +19,7 @@ public class scrPrize : MonoBehaviour {
 		}
 		m2 = gameObject.GetComponent<MeshRenderer>().material;
 		SetPosition();
+		//Random.InitState(Mathf.RoundToInt(Time.realtimeSinceStartup));
 	}
 	
 	// Update is called once per frame
@@ -32,7 +33,15 @@ public class scrPrize : MonoBehaviour {
 	void OnTriggerEnter(Collider col){
 		Debug.Log(col.gameObject.name + " " + col.gameObject.tag);
 		if (col.gameObject.tag == "ball" && myGlobal.gameData != null) {
-			myGlobal.gameData.specGrCount[prizeType] ++;
+			if (prizeType == 0){
+				myGlobal.gameData.gr += 20;
+				GameObject.Find("txtGr").GetComponent<UnityEngine.UI.Text>().text = myGlobal.gameData.gr.ToString();
+			} else {
+					myGlobal.gameData.specGrCount[prizeType] ++;
+					foreach (scrBallsPanel g in GameObject.Find("panPoints").transform.GetComponentsInChildren<scrBallsPanel>()){
+						g.showCount();
+					}
+				}
 			Destroy(gameObject, 0.2f);
 		}
 	}
@@ -50,7 +59,7 @@ public class scrPrize : MonoBehaviour {
 		Debug.Log("tot="+gg.Length.ToString());
 		if (gg.Length>0){
 			
-			Random.InitState(Mathf.RoundToInt(Time.realtimeSinceStartup));
+
 			int gn = Random.Range(0, gg.Length);
 			Debug.Log("gn="+gn.ToString()+" gg(x)="+gg[gn].transform.position.x.ToString()+" tot="+gg.Length.ToString());
 			transform.position = new Vector3(gg[gn].transform.position.x + Random.Range(0, gg[gn].transform.localScale.x) - Mathf.Round(gg[gn].transform.localScale.x/2),

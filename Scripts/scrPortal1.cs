@@ -54,6 +54,7 @@ public class scrPortal1 : MonoBehaviour {
 		ball.GetComponent<ConstantForce>().force = Vector3.zero;
 		ball.GetComponent<BallScript>().teleportRun = false;
 		ball = null;
+		myGlobal.currentLevel.noChangeAfterTeleport = true;
 		//Debug.Log(string.Format("v={0} av={1}",gameObject.GetComponent<Rigidbody>().velocity,gameObject.GetComponent<Rigidbody>().angularVelocity));
 	}
 }

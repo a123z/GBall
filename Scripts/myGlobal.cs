@@ -6,9 +6,9 @@ using System;
 
 public static class myGlobal{
 	//public static int lastLevel;
-	public static int levelsCount=10;
+	public static int levelsCount=11;
 	//public static int score;
-	public static int GPower;
+	//public static int GPower;
 	//public static bool soundOn = true;
 	public static int soundVolume;
 	public static int musicVolume;
@@ -21,7 +21,9 @@ public static class myGlobal{
 	public static int deltaGr=1;
 	public static float StartLevelTime=0;
 	public static string goLevelName = "goLevel";
-	const int GrDefault=200; //кол-во гравитонов по умолчанию
+	//public static bool noChangeAfterTeleport = false;
+	public static scrLevel currentLevel;
+	const int GrDefault=100; //кол-во гравитонов по умолчанию
 
 
 	//static bool _musicOn;
@@ -102,12 +104,10 @@ public static class myGlobal{
 			}
 		}
 
-		if (gameData.levels[1] == null) { //если не получилось загрузить - создадим пустые уровни
-			for (int i=0;i<levelsCount;i++){
-				gameData.levels[i] = new scrClasses.Level();
-			}
-
+		for (int i=0;i<levelsCount-1;i++){ //если не получилось загрузить - создадим пустые уровни
+			if (gameData.levels[i] == null)	gameData.levels[i] = new scrClasses.Level();
 		}
+
 		//Debug.Log(string.Format("len = {0}|{1}",myGlobal.levels.GetLength(0),myGlobal.levels[0].points.GetLength(0)));
 
 

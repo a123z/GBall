@@ -94,6 +94,7 @@ public class scrBallsPanel : MonoBehaviour {
 	}*/
 
 	public void beginDrag(BaseEventData bde){
+		Debug.Log("start drag");
 		rrr = GameObject.Instantiate(gameObject, Input.mousePosition, Quaternion.identity) as GameObject;
 		rrr.transform.SetParent(GameObject.Find("pfCanvas").transform);
 		myGlobal.UIClick = true;
@@ -106,6 +107,7 @@ public class scrBallsPanel : MonoBehaviour {
 	}
 
 	public void endDrag(BaseEventData bde){
+		Debug.Log("end drag");
 		Vector3 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 		pos.z = 0;
 		//gameObject.
@@ -117,14 +119,16 @@ public class scrBallsPanel : MonoBehaviour {
 
 		Destroy(rrr);
 		myGlobal.UIClick = false;
-		//rrr = null;
 	}
 
 	public void btnClick(BaseEventData bde){
 		Debug.Log("just click");
-		myGlobal.UIClick = true;
-		GameObject.Find("svTextInfo").SetActive(true);
-		//transform.GetComponent<scrTextInfo>().ShowText();
+
+
+		//myGlobal.UIClick = true;
+		//GameObject.Find("svTextInfo").SetActive(true);
+		Debug.Log("just click" + (bde as PointerEventData).position.ToString());
+		if (bde != null) transform.GetComponent<scrTextInfo>().ShowText((bde as PointerEventData).position);
 	}
 
 }

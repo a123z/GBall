@@ -77,9 +77,11 @@ public class BallScript : MonoBehaviour {
 					BasketPass = 0;
 					//GameObject.Find("pfPortal1").GetComponent<scrPortal1>().RunTeleport();
 					//teleportRun = portal.GetComponent<scrPortal1>().RunTeleport(gameObject);
-					Debug.Log("show result");
-					basket = null;
-					GameObject.Find("pfResultCanvas").GetComponent<scrResult>().ShowResult();
+					if (myGlobal.currentLevel.noChangeAfterTeleport){
+						Debug.Log("show result");
+						basket = null;
+						GameObject.Find("pfResultCanvas").GetComponent<scrResult>().ShowResult();
+					} else if (!teleportRun) teleportRun = portal.GetComponent<scrPortal1>().RunTeleport(gameObject);
 
 				}
 			}else WaitPass-=Time.fixedDeltaTime;

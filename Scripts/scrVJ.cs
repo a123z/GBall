@@ -38,10 +38,11 @@ public class scrVJ : MonoBehaviour {
 				case 3: MovingGO.transform.position -= new Vector3(0,Step,0); break;
 				case 4: MovingGO.transform.position -= new Vector3(Step,0,0); break;
 			}
+			myGlobal.currentLevel.noChangeAfterTeleport = false;
 		} else Debug.Log("Moving Object is NULL!");
 	}
 
-	public void moveUp(){
+	/*public void moveUp(){
 		if (MovingGO != null){
 			MovingGO.transform.position += new Vector3(0,Step,0);
 		} else Debug.Log("Moving Object is NULL!");
@@ -63,7 +64,7 @@ public class scrVJ : MonoBehaviour {
 		if (MovingGO != null){
 			MovingGO.transform.position += new Vector3(Step,0,0);
 		} else Debug.Log("Moving Object is NULL!");
-	}
+	}*/
 
 	public void stopPress(){
 		if (pressed) pressed = false;

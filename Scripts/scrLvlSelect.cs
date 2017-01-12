@@ -99,7 +99,7 @@ public class scrLvlSelect : MonoBehaviour {
 		if (objButton!=null){
 			//	btnLvl.GetComponentInChildren<UnityEngine.UI.Text>().text = "5";
 			objButton.GetComponentInChildren<UnityEngine.UI.Button>().image.enabled = aOpened;
-			objButton.GetComponentInChildren<UnityEngine.UI.Image>().enabled = aPassed;
+			objButton.transform.FindChild("Image").GetComponentInChildren<UnityEngine.UI.Image>().enabled = aPassed;
 		}
 	}
 

@@ -9,6 +9,7 @@ public class scrLevel : MonoBehaviour {
 	public float HighSpeed = 5f;	//скорость выше которой насчитываются бонусы
 	public float LargeHeight = 40f;  //высота выше которой насчитываются бонусы
 	public int[] przCnt;   //кол-во призов при первом проходе уровня
+	public bool noChangeAfterTeleport = false;
 	/*public GameObject Point0Prefab;
 	public GameObject Point1Prefab;
 	public GameObject Point2Prefab;*/
@@ -23,8 +24,8 @@ public class scrLevel : MonoBehaviour {
 			myGlobal.Init(); //инициализируем массивы данных
 			myGlobal.LoadLevelsFromFile(myGlobal.saveFileName); //заполняем данными из файла сохранения
 		}
-		//Debug.Log(przCnt.Length.ToString());
 		//if (myGlobal.gameData.levels[levelNum].prizeCount == null) myGlobal.gameData.levels[levelNum].prizeCount = przCnt;
+
 		loadLevelData(); //загружаем сцену из массива данных
 		myGlobal.UIClick = false; 
 		
@@ -38,6 +39,7 @@ public class scrLevel : MonoBehaviour {
 			g.GetComponent<MeshRenderer>().enabled = false;
 		}
 
+		myGlobal.currentLevel = GetComponent<scrLevel>();
 
 	}
 
@@ -80,16 +82,19 @@ public class scrLevel : MonoBehaviour {
 		}
 		//посчитаем кол-во призов на сцене и запишем в массив
 		ggg = GameObject.FindGameObjectsWithTag("prize");
+		Debug.Log("ggg=" + ggg.Length.ToString());
 		foreach (GameObject g in ggg){
-			myGlobal.gameData.levels[levelNum].prizeCount[g.GetComponent<scrPrize>().prizeType]++;
+			if (g != null){
+				myGlobal.gameData.levels[levelNum].prizeCount[g.GetComponent<scrPrize>().prizeType]++;
+			}
 		}
 
 	}
 
 	void loadLevelData(){
-		if (myGlobal.gameData.specGrCount == null) myGlobal.gameData.specGrCount = new int[10] {0,10,10,0,0,0,0,0,0,0};
+		//if (myGlobal.gameData.specGrCount == null) myGlobal.gameData.specGrCount = new int[10] {0,10,10,0,0,0,0,0,0,0};
 		if (myGlobal.gameData.levels[levelNum] != null) {
-			for (int i_=0; i_<myGlobal.gameData.levels[levelNum].points.GetLength(0); i_++){
+			for (int i_=0; i_<myGlobal.gameData.levels[levelNum].points.GetLength(0); i_++){ //восстанавливаем точки на сцене
 				//if (myGlobal.gameData.levels[levelNum].points[i_] != null){
 					GameObject g = Instantiate(
 										((GameObject) Resources.Load(myGlobal.pointPrefabName[myGlobal.gameData.levels[levelNum].points[i_].pType])),
@@ -101,23 +106,26 @@ public class scrLevel : MonoBehaviour {
 					g.GetComponent<pointScript>().pointType = myGlobal.gameData.levels[levelNum].points[i_].pType; 
 				//}
 			}
-			if (myGlobal.gameData.levels[levelNum].prizeCount != null){ //есть данные о призах
-				for (int i_=0; i_<myGlobal.gameData.levels[levelNum].prizeCount.Length-1; i_++){ //для каждого типа призов
-					for (int i2_= 0; i2_ < myGlobal.gameData.levels[levelNum].prizeCount[i_];i2_++){ //создадим указанное кол-во призов
-						GameObject po = GameObject.Instantiate(PrefabPrize);
-						po.GetComponent<scrPrize>().prizeType = i_;
-					}
-				}
-			} else {
-				Debug.Log("prizeCount is null");
+			if (myGlobal.gameData.levels[levelNum].prizeCount == null || myGlobal.gameData.levels[levelNum].prizeCount.Length == 0){ //нет данных о призах
+				Debug.Log("prizeCount is null " +levelNum.ToString()+" | "+ przCnt.ToString());
 				//данные о призах отсутствует - создадим данные по призам
 				myGlobal.gameData.levels[levelNum].prizeCount = przCnt;
 			}
+
 		} else {
 			Debug.Log("Level is null");
 			//если уровень отсутствует - т.е. его раньше не проходили - создадим данные по уровню
 			myGlobal.gameData.levels[levelNum] = new scrClasses.Level();
 			myGlobal.gameData.levels[levelNum].prizeCount = przCnt;//new int[10]  {0,2,1,0,0,0,0,0,0,0};
+		}
+		Debug.Log("prizeCount == " +levelNum.ToString()+" | "+ przCnt.Length.ToString() + " array "+ myGlobal.gameData.levels[levelNum].prizeCount.Length.ToString());
+		for (int i_=0; i_<myGlobal.gameData.levels[levelNum].prizeCount.Length; i_++){ //для каждого типа призов
+			Debug.Log("aaa " + myGlobal.gameData.levels[levelNum].prizeCount[i_].ToString());
+			for (int i2_= 0; i2_ < myGlobal.gameData.levels[levelNum].prizeCount[i_];i2_++){ //создадим указанное кол-во призов
+				Debug.Log("bbb");
+				GameObject po = GameObject.Instantiate(PrefabPrize);
+				po.GetComponent<scrPrize>().prizeType = i_;
+			}
 		}
 	}
 		
@@ -125,6 +133,7 @@ public class scrLevel : MonoBehaviour {
 		saveLevelData();
 		myGlobal.SaveLevelsToFile(myGlobal.saveFileName);
 	}*/
+
 
 	public void GameExit(){ //вызывается по кнопке выход в UI
 		Application.Quit();
@@ -136,6 +145,8 @@ public class scrLevel : MonoBehaviour {
 		saveLevelData();
 		myGlobal.SaveLevelsToFile(myGlobal.saveFileName);
 	}
+
+
 
 
 }

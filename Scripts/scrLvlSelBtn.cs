@@ -17,6 +17,6 @@ public class scrLvlSelBtn : MonoBehaviour {
 
 	public void LoadThisLevel(){
 		Debug.Log("load level "+lvlNum.ToString());
-		if (lvlNum>0&&(lvlNum==1 || myGlobal.gameData.levels[lvlNum-1].passed)) SceneManager.LoadScene("level" + (lvlNum).ToString());
+		if (lvlNum>0 && (lvlNum==1 || myGlobal.gameData.levels[lvlNum-1].passed)) SceneManager.LoadScene("level" + (lvlNum).ToString());
 	}
 }

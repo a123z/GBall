@@ -57,7 +57,7 @@ public class scrClasses// : MonoBehaviour
 			graviPlus = 0;
 			graviMinus = 0;
 			points = new Point[0];
-			prizeCount = new int[0];
+			prizeCount = new int[0]; // № элемента массива - тип приза, значение элемента - кол-во призов
 		}
 	}
 
