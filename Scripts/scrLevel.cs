@@ -9,11 +9,14 @@ public class scrLevel : MonoBehaviour {
 	public float HighSpeed = 5f;	//скорость выше которой насчитываются бонусы
 	public float LargeHeight = 40f;  //высота выше которой насчитываются бонусы
 	public int[] przCnt;   //кол-во призов при первом проходе уровня
-	public bool noChangeAfterTeleport = false;
+	public bool noChangeAfterTeleport = true;
 	/*public GameObject Point0Prefab;
 	public GameObject Point1Prefab;
 	public GameObject Point2Prefab;*/
 	public GameObject PrefabPrize;
+
+	//private variable
+	public GameObject TutorGO;
 
 	// Use this for initialization
 	void Start () {
@@ -41,6 +44,17 @@ public class scrLevel : MonoBehaviour {
 
 		myGlobal.currentLevel = GetComponent<scrLevel>();
 
+		TutorGO = GameObject.Find("paTutor");
+
+		if (TutorGO != null) {
+			TutorGO.SetActive(false);
+			if (!myGlobal.gameData.levels[levelNum].passed){
+				StartCoroutine(showTutor(0));
+			} else {
+				TutorGO = null;
+			}
+		}
+
 	}
 
 	/*void OnGUI(){
@@ -54,7 +68,13 @@ public class scrLevel : MonoBehaviour {
 
 	public void loadNextLevel(){
 		saveLevelData();
-		myGlobal.loadLevel(levelNum+1);
+		if (levelNum+1<myGlobal.levelsCount){
+			myGlobal.loadLevel(levelNum+1);
+		} else {
+			myGlobal.ShowFinish = true;
+			myGlobal.loadLevel(0);
+		}
+
 		//SceneManager.LoadScene("level" + (levelNum+1).ToString());
 	}
 
@@ -134,6 +154,23 @@ public class scrLevel : MonoBehaviour {
 		myGlobal.SaveLevelsToFile(myGlobal.saveFileName);
 	}*/
 
+	/// <summary>
+	/// обертка для вызова showStep из scrTutor
+	/// </summary>
+	/// <param name="stepNo">Номер шага обучения</param>
+	public void showTutorNow(int stepNo=-1){
+		if (TutorGO != null){
+			TutorGO.GetComponent<scrTutor>().showStep(stepNo);
+		}
+	}
+
+
+	public IEnumerator showTutor(int stepNo = -1){
+		yield return new WaitForSeconds(5f);
+		if (TutorGO != null){
+			TutorGO.GetComponent<scrTutor>().showStep(stepNo);
+		}
+	}
 
 	public void GameExit(){ //вызывается по кнопке выход в UI
 		Application.Quit();

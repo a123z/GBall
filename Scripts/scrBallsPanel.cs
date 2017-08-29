@@ -6,11 +6,15 @@ public class scrBallsPanel : MonoBehaviour {
 	GameObject rrr;
 	//public GameObject point2DPrefab; //не используется в скрипте 
 	GameObject point3DPrefab;
+	GameObject goLevel;
+
 	public int pointType=0;
 
 	// Use this for initialization
 	void Start () {
-		if (GameObject.Find(myGlobal.goLevelName)==null) Debug.Log("goLevel not Found");
+		goLevel = GameObject.Find(myGlobal.goLevelName);
+		if (goLevel==null) Debug.Log("goLevel not Found");
+		//if (GameObject.Find(myGlobal.goLevelName)==null) Debug.Log("goLevel not Found");
 		//point3DPrefab = (GameObject) UnityEditor.AssetDatabase.LoadAssetAtPath("Assets/Prefabs/"+myGlobal.pointPrefabName[pointType]+".prefab", typeof(GameObject));
 		point3DPrefab = (GameObject) Resources.Load(myGlobal.pointPrefabName[pointType]);
 		if (myGlobal.gameData == null) Debug.Log("gameData not init");
@@ -115,6 +119,10 @@ public class scrBallsPanel : MonoBehaviour {
 		if (pointType==0 || myGlobal.gameData.specGrCount[pointType]>0){
 			GameObject.Instantiate(point3DPrefab,pos,Quaternion.identity);
 			decPointCount();
+
+			if (goLevel.GetComponent<scrLevel>().TutorGO != null && myGlobal.lastTutorStep<1) {//показать только 1 раз а не каждый раз при добавлении
+				StartCoroutine(goLevel.GetComponent<scrLevel>().showTutor(1));
+			}
 		}
 
 		Destroy(rrr);

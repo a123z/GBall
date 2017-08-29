@@ -3,7 +3,7 @@ using System.Collections;
 
 public class scrVJ : MonoBehaviour {
 	public GameObject MovingGO;
-	public float Step = 0.2f;
+	public float Step = 0.15f;
 
 	Vector3 tempV3;
 	bool pressed=false;

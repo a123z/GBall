@@ -44,7 +44,8 @@ public class scrClasses// : MonoBehaviour
 	{
 		public Point[] points;
 		public bool passed;
-		public int highScore;
+		//public int highScore;
+		public int Score;
 		public int[] prizeCount;
 		//public int usedGr;
 
@@ -53,7 +54,8 @@ public class scrClasses// : MonoBehaviour
 
 		public Level(){
 			passed = false;
-			highScore = 0;
+			//highScore = 0;
+			Score = 0;
 			graviPlus = 0;
 			graviMinus = 0;
 			points = new Point[0];
@@ -71,11 +73,33 @@ public class scrClasses// : MonoBehaviour
 		public int[] specGrCount; //points count: 0-base graviti 1-Anti gravity 2-pulse gravity 3-inverse gravity 
 		public bool soundOn;
 		public bool musicOn;
+		public int lang = 0;
 		//public int aGrCount;  //Anti gravity points count
 		//public int pGrCount;  //pulse gravity points count
 		//public int iGrCount;  //inverse gravity points count
 		//or need use array????
 
+	}
+
+	[System.Serializable]
+	public class LocalizationTxt
+	{
+		public string txtBtnStart;
+		public string txtBtnExit;
+		public string txtBtnAbout;
+		public string txtAbout;
+		public string txtFinish1;
+		public string txtFinish2;
+		public string txtFinish3;
+		public string txtFinish4;
+		public string txtFinish5;
+		public string txtFinish6;
+		public string txtResult1;
+		public string txtResult2;
+		public string txtResult3;
+		public string txtResult4;
+		public string txtResult5;
+		public string txtResult6;
 	}
 }
 

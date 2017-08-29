@@ -30,7 +30,7 @@ public class scrTextInfo : MonoBehaviour {
 
 	public void ShowText(int txtId, Vector2 GoPos){
 		if (svGO != null){
-			svGO.transform.FindChild("Content").GetComponent<UnityEngine.UI.Text>().text = txt;
+			svGO.transform.Find("Content").GetComponent<UnityEngine.UI.Text>().text = txt;
 			svGO.SetActive(true);
 		}
 	}

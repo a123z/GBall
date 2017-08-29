@@ -1,0 +1,256 @@
+﻿using UnityEngine;
+using System.Collections;
+
+
+public class scrController : MonoBehaviour {
+	int Touch1Type; //0-ничего не делаем 1-попали в точку 2-никуда не попали 
+	                //3-попали в точку и двигаем  двигаем  4-никуда не попали и держим 5-попали в точку и отпустили
+	Vector3 BeginTouch1;
+	Vector3 BeginTouch2;
+	Vector3 TouchPos1;  //для отработки мышки или прикосновения
+	Vector3 TouchPos2;  //для отработки мышки или прикосновения
+	//Vector3 pointStartPos;
+	Vector3 tempV3;
+	GameObject point;
+	GameObject pointControl;
+	//float Touch1Time;
+	Ray ray;
+	RaycastHit hit;
+	bool RaycastF;
+	float WheelAxis;
+	float beginOrtSize;
+
+
+	// Use this for initialization
+	void Start () {
+		//Canvas.
+		pointControl = new GameObject();
+		pointControl = GameObject.Find("pfCanvas/pointControl1") as GameObject;
+		//Debug.Log("start in controller " + pointControl.ToString());
+		//pointControl = GameObject.FindGameObjectWithTag("points") as GameObject;
+		if (pointControl == null) Debug.Log("not found");
+			else pointControl.GetComponent<scrPointControl>().hideControl();
+		BeginTouch1 = new Vector2();
+		BeginTouch2 = new Vector2();
+		//pointStartPos = new Vector3();
+		tempV3 = new Vector3();
+        //WheelAxis = Input.mouseScrollDelta.y;
+        Input.simulateMouseWithTouches = false;
+	}
+	
+	// Update is called once per frame
+	void Update () {
+		//отрабатываем нажатия на экран
+		if (Input.mouseScrollDelta.y != 0){
+			if (Camera.main.orthographic){
+				if (((Camera.main.orthographicSize - Input.mouseScrollDelta.y)>15)&& //если после изменения в пределах то изменяем иначе пропускаем
+				    ((Camera.main.orthographicSize - Input.mouseScrollDelta.y)<50)){
+					Camera.main.orthographicSize += - Input.mouseScrollDelta.y;
+					//WheelAxis = Input.mouseScrollDelta.y;
+				}
+			}
+			//Debug.Log(string.Format("wheel {0}",));
+		}
+
+		if ((Input.touchCount>0)
+			||(Input.GetMouseButton(0))
+			||(Input.GetMouseButtonUp(0))) {
+            if (
+                UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject () 
+				|| myGlobal.UIClick 
+				|| (Input.touchCount > 0 && UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject(Input.GetTouch(0).fingerId))
+               )
+            {
+				//Debug.Log("hide");
+				//GameObject.Find("svTextInfo").SetActive(false);
+				return;
+			}
+	    	if (Input.touchCount==1){ //одно нажатие - двигаем точку или управляем параметрами
+				TouchPos1 = Camera.main.ScreenToWorldPoint(Input.GetTouch(0).position);
+				switch (Input.GetTouch(0).phase) {
+					case TouchPhase.Began:
+						Touch1Type = 1; //считаем что попали в точку - проверим позднее
+						//GameObject d = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+						//d.transform.position = new Vector3(TouchPos1.x,TouchPos1.y,0);
+						//d.transform.localScale = new Vector3(3,3,3);
+					break;
+					case TouchPhase.Moved: //двигаем палец
+						switch (Touch1Type){
+						case 2: //нажали на точку
+							Touch1Type = 3; //попали в точку и двигаем её
+							break;
+						case 3:
+							break;
+						case 4: //нажали мимо точки
+							Touch1Type = 5; //попали мимо точки и двигаем мышь/палец
+							break;
+						case 5:
+							break;
+						default:
+							Touch1Type = 1;
+							break;
+						}
+						break;
+					case TouchPhase.Stationary:
+						break;
+					case TouchPhase.Canceled:
+						goto case TouchPhase.Ended;
+						//break;
+					case TouchPhase.Ended:
+						switch (Touch1Type){
+						case 2:
+							Touch1Type = 6;//show menu
+							break;
+						case 4:
+							Touch1Type = 7;//show menu
+							break;
+						}
+						break;
+				}
+                
+
+			} else if (Input.touchCount==2){ //ничего не двигаем - масштабируем экран
+					//TouchPos1 = Camera.main.ScreenToWorldPoint(Input.GetTouch(0).position);
+					//TouchPos2 = Camera.main.ScreenToWorldPoint(Input.GetTouch(1).position);
+					TouchPos1 = Input.GetTouch(0).position;
+					TouchPos2 = Input.GetTouch(1).position;
+					if (Touch1Type!=9){ //до этого ничего не нажимали
+						BeginTouch1 = TouchPos1;
+						BeginTouch2 = TouchPos2;
+						beginOrtSize = Camera.current.orthographicSize;
+					}
+					
+					Touch1Type = 9;
+					//movePoint = false;
+					/*if (Touch1Type != 5){ //до этого касались не двумя пальцами
+						BeginTouch1 = Input.GetTouch(0).position;
+						BeginTouch2 = Input.GetTouch(1).position;
+						Touch1Type = 5;
+					} else {
+
+							//контроль мах и мин значаения
+							BeginTouch1 = Input.GetTouch(0).position;
+							BeginTouch2 = Input.GetTouch(1).position; 
+						}*/
+		  		} 
+			if (Input.GetMouseButton(0)){
+				Debug.Log("mouse click");
+				TouchPos1 = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+				if (Input.GetMouseButtonDown(0)){
+					Touch1Type = 1; //куда-то нажали
+					//GameObject d = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+					//d.transform.position = new Vector3(TouchPos1.x,TouchPos1.y,0);
+					//d.transform.localScale = new Vector3(3,3,3);
+				} else
+				if ((BeginTouch1-TouchPos1).sqrMagnitude>0.1){//двигаем мышь
+					//Debug.Log("mb pressed");
+					switch (Touch1Type){
+					case 2: //нажали на точку
+						Touch1Type = 3; //попали в точку и двигаем её
+						break;
+					case 4: //нажали мимо точки
+						Touch1Type = 5; //попали мимо точки и двигаем мышь/палец
+						break;
+					}
+				}
+			} else if (Input.GetMouseButtonUp(0)){
+				switch (Touch1Type){
+				case 2:
+					Touch1Type = 6;//show menu
+					break;
+				case 4:
+					Touch1Type = 7;//show menu
+					break;
+				}
+				//Touch1Type = 0; //ввести тип 9 - окончание нажатия?
+			}
+			//Debug.Log(string.Format("type {0}",Touch1Type));
+			//main DO case
+			switch (Touch1Type){ //должо выполняться при хотябы одном нажатии
+			case 1: //нажали 1 пальцем
+				BeginTouch1 = TouchPos1;
+				//Touch1Time = Time.time;
+				//ray = Camera.main.ScreenPointToRay(TouchPos1);
+				ray = new Ray(TouchPos1, Vector3.forward);
+				RaycastF = Physics.Raycast(ray, out hit, 110f);
+				//if (RaycastF) Debug.Log("raycast mouse"+hit.collider.name);
+				//if (RaycastF)Debug.Log(string.Format("tag {0}",hit.collider.tag));
+				if (RaycastF&&(hit.collider.CompareTag("points"))){ //проверяем что попали в гравиточку    если никуда не попали и долго держим - создать новую
+					//Debug.Log(string.Format("tag {0}",hit.collider.tag));
+					point = hit.collider.gameObject;
+					//pointStartPos = point.transform.position;
+					Touch1Type = 2; 
+					//goto case 2;
+					//отобразить меню точки
+				} else {
+							Touch1Type = 4;
+							goto case 4;
+						}
+
+				break;
+			case 3: //нажали в точку и двигали
+				tempV3 = TouchPos1 - BeginTouch1;
+				if (tempV3.sqrMagnitude > 0.02f) {
+					//Camera.main.ScreenToViewportPoint();
+					point.transform.position = point.transform.position + tempV3;
+					BeginTouch1 = TouchPos1;
+					myGlobal.currentLevel.noChangeAfterTeleport = false;
+						if (myGlobal.lastTutorStep<3){
+							GameObject goLevel = GameObject.Find(myGlobal.goLevelName);
+							if (goLevel != null && goLevel.GetComponent<scrLevel>().TutorGO != null) {//показать только 1 раз а не каждый раз
+								StartCoroutine(goLevel.GetComponent<scrLevel>().showTutor(3));
+							}
+						}
+				}
+				break;
+			case 4: //Нажали в пустое место скрыть меню точки если открыто
+				//pointControl.GetComponent<scrPointControl>().hideControl();
+				hidePointControl();
+				break;
+			case 5: //нажали мимо точки и двигали
+				tempV3 = TouchPos1 - BeginTouch1;
+				if (tempV3.sqrMagnitude > 0.1f) {
+					//Debug.Log(string.Format("move cam"));// {0}",tempV3));
+
+					Camera.main.transform.position = Camera.main.transform.position - tempV3;
+					//BeginTouch1 = TouchPos1;
+					BeginTouch1 = Camera.main.ScreenToWorldPoint(Input.mousePosition);//need case touch or mouse
+				}
+				break;
+			case 6: //show menu point
+				Debug.Log("show menu point");
+                    if (pointControl != null)
+                    {
+                        //Debug.Log("call control"+point.name);
+                        pointControl.GetComponent<scrPointControl>().showControl(point);
+                    }
+                    //else
+                      //  GameObject.Find("Text").GetComponent<UnityEngine.UI.Text>().text += " null";
+                Touch1Type = 0; //ввести тип 10 - окончание нажатия?
+				break;
+			case 7: //show menu screen
+				Debug.Log("show menu screen");
+				Touch1Type = 0; //ввести тип 10 - окончание нажатия?
+				break;
+			case 8:
+				//Debug.Log("Touch1Type 8");
+				break;
+			case 9:
+				if (Input.touchCount>=2 && Camera.current.orthographic){
+					Camera.current.orthographicSize = beginOrtSize*((BeginTouch1 - BeginTouch2).magnitude/(TouchPos1-TouchPos2).magnitude);
+				}
+				break;
+		}
+	} else if (Input.touchCount==0){ //ничего не нажали или может только отпустили?
+			//if ((Touch1Type==1)&&(Time.time-Touch1Time<1)){
+			//show context menu1
+			//}
+			Touch1Type = 0;
+		}//touch=0
+	}   //update
+
+
+	public void hidePointControl(){
+		if (pointControl != null) pointControl.GetComponent<scrPointControl>().hideControl();
+	}
+} //class

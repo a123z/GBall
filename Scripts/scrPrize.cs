@@ -11,7 +11,7 @@ public class scrPrize : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		Debug.Log("start prize");
-		m = gameObject.transform.FindChild("Sphere").GetComponent<MeshRenderer>().material;
+		m = gameObject.transform.Find("Sphere").GetComponent<MeshRenderer>().material;
 		switch (prizeType){
 			case 1: m.color = new Color32(210,210,210,255); break;
 			case 2: m.color = new Color32(20,180,190,255); break;
@@ -34,7 +34,7 @@ public class scrPrize : MonoBehaviour {
 		Debug.Log(col.gameObject.name + " " + col.gameObject.tag);
 		if (col.gameObject.tag == "ball" && myGlobal.gameData != null) {
 			if (prizeType == 0){
-				myGlobal.gameData.gr += 20;
+				myGlobal.gameData.gr += 25;
 				GameObject.Find("txtGr").GetComponent<UnityEngine.UI.Text>().text = myGlobal.gameData.gr.ToString();
 			} else {
 					myGlobal.gameData.specGrCount[prizeType] ++;
@@ -62,8 +62,10 @@ public class scrPrize : MonoBehaviour {
 
 			int gn = Random.Range(0, gg.Length);
 			Debug.Log("gn="+gn.ToString()+" gg(x)="+gg[gn].transform.position.x.ToString()+" tot="+gg.Length.ToString());
-			transform.position = new Vector3(gg[gn].transform.position.x + Random.Range(0, gg[gn].transform.localScale.x) - Mathf.Round(gg[gn].transform.localScale.x/2),
-				gg[gn].transform.position.y + Random.Range(0, gg[gn].transform.localScale.y) - Mathf.Round(gg[gn].transform.localScale.y/2), 0);
+			transform.position = new Vector3(
+				gg[gn].transform.position.x + Random.Range(0, gg[gn].transform.localScale.x) - Mathf.Round(gg[gn].transform.localScale.x/2),
+				gg[gn].transform.position.y + Random.Range(0, gg[gn].transform.localScale.y) - Mathf.Round(gg[gn].transform.localScale.y/2),
+				0);
 		}
 	}
 }

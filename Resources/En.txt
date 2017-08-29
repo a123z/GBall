@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LocalizationTxt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <txtBtnStart>Start</txtBtnStart>
+  <txtBtnExit>Exit</txtBtnExit>
+  <txtBtnAbout>About</txtBtnAbout>
+  <txtAbout>&lt;b&gt;About the game: &lt;/b&gt;
+
+The player's task is move the Ball (the green sphere) into the basket.
+If the ball falls down, the recovery system will teleport it`s to the start.
+
+For resolve this difficult task need use the gravity points. Exists 3 types of Points:
+- the normal - they gravitate the Ball;
+- anti-gravity - they repel the Ball;
+- pulsating - they gravitate the ball when it comes to point and push
+when it moves away from the point. 
+Each point has the power - ie how 
+much it affects to the Ball. When changing power of the point are spent &lt;i&gt;"gravitons"&lt;/i&gt;.
+ Amount of normal points is unlimited, antigravity and the pulse points you must collecting on level(prizes). Also by prizes
+refilled &lt;i&gt;gravitons.&lt;/i&gt;
+
+Welcome - gravity in Your hands!
+
+---------
+Idea, design, graphics and programming -
+&lt;i&gt;Gavrilov Vasiliy.&lt;/i&gt;
+</txtAbout>
+  <txtFinish1>Congratulations!</txtFinish1>
+  <txtFinish2>You are passed last level</txtFinish2>
+  <txtFinish3>Your result:</txtFinish3>
+  <txtFinish4>Last result:</txtFinish4>
+  <txtFinish5>P.S. Try to improve your score! :-)</txtFinish5>
+  <txtResult1>RESULTS</txtResult1>
+  <txtResult2>Level time</txtResult2>
+  <txtResult3>Rest of gravitons</txtResult3>
+  <txtResult4>High speed</txtResult4>
+  <txtResult5>High altitude</txtResult5>
+  <txtResult6>Total:</txtResult6>
+</LocalizationTxt>

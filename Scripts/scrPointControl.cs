@@ -7,6 +7,7 @@ public class scrPointControl : MonoBehaviour {
 	GameObject grCount;
 	GameObject VJ;
 
+
 	bool pressed;
 	int typePress=0;
 	float waitRepeat=0;
@@ -19,6 +20,7 @@ public class scrPointControl : MonoBehaviour {
 		if (VJ == null) Debug.Log("VJoystick not found!!!"); else Debug.Log("VJoystick found");
 		initPointControl();
 		updatePowerText();
+
 	}
 
 	void Start () {
@@ -50,7 +52,7 @@ public class scrPointControl : MonoBehaviour {
 		point = aActivePoint;
         //Canvas.
         initPointControl();
-		transform.position = Camera.main.WorldToScreenPoint(aActivePoint.transform.position + new Vector3(aActivePoint.transform.localScale.x*2,0,0))+(new Vector3(50,0,0));
+		transform.position = Camera.main.WorldToScreenPoint(aActivePoint.transform.position + new Vector3(aActivePoint.transform.localScale.x*3,0,0))+(new Vector3(50,0,0));
 		updatePowerText();
 		gameObject.SetActive(true);
 		if (VJ != null) {
@@ -95,6 +97,12 @@ public class scrPointControl : MonoBehaviour {
 			point.GetComponent<pointScript>().SetGravity(point.GetComponent<pointScript>().GetGravity()+type*myGlobal.deltaGr);
 			updatePowerText();
 			myGlobal.currentLevel.noChangeAfterTeleport = false;
+			if (myGlobal.lastTutorStep<2){
+				GameObject goLevel = GameObject.Find(myGlobal.goLevelName);
+				if (goLevel != null && goLevel.GetComponent<scrLevel>().TutorGO != null) {//показать только 1 раз а не каждый раз
+					StartCoroutine(goLevel.GetComponent<scrLevel>().showTutor(2));
+				}
+			}
 		};
 	}
 

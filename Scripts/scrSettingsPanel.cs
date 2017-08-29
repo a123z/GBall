@@ -9,7 +9,7 @@ public class scrSettingsPanel : MonoBehaviour {
 		//GameObject g = GameObject.Find("btnSettings"); 
 		GameObject.Find("btnSettings").GetComponent<UnityEngine.UI.Button>().onClick.AddListener(delegate{ShowHidePanel();});
 		GameObject.Find("btnLvlScene").GetComponent<UnityEngine.UI.Button>().onClick.AddListener(delegate{myGlobal.LoadLevelSelect();});
-		GameObject.Find("btnExit").GetComponent<UnityEngine.UI.Button>().onClick.AddListener(delegate{Application.Quit();});
+		GameObject.Find("btnExit").GetComponent<UnityEngine.UI.Button>().onClick.AddListener(delegate{myGlobal.loadLevel(0);});
 
 		UnityEngine.UI.Toggle compTSnd = GameObject.Find("togSound").GetComponent<UnityEngine.UI.Toggle>();
 		compTSnd.isOn = myGlobal.getSound();
